@@ -17,7 +17,15 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "ngx-day-feed": [
+        "projects/ngx-day-feed/src/lib"
+      ],
+      "ngx-day-feed/*": [
+        "projects/ngx-day-feed/src/lib/*"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
