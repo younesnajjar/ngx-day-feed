@@ -1,24 +1,44 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {AfterContentInit, Component, ContentChildren, Input, OnInit, QueryList} from '@angular/core';
+import {AvailabilityComponent} from './availability/availability.component';
 
 @Component({
   selector: 'lib-ngx-day-feed',
   template: `
 
     <div class="feed-container">
-      <div *ngFor="let hour of hours; let i = index" class="feed-moment">
-        <div>{{ hour }}</div>
+      <div class="hours-container">
+        <div *ngFor="let hour of hours; let i = index" class="feed-moment">
+          {{ hour }}
+        </div>
+      </div>
+
+      <div class="availabilities-container">
+        <ng-content></ng-content>
       </div>
     </div>
 
   `,
   styleUrls: ['./ngx-day-feed.component.scss']
 })
-export class NgxDayFeedComponent implements OnInit {
+export class NgxDayFeedComponent implements OnInit, AfterContentInit {
+  @ContentChildren(AvailabilityComponent) inputTabs: QueryList<AvailabilityComponent>;
+  public hours: string[];
+
+
   @Input() startTime = 8;
   @Input() endTime = 20;
-  hours: string[];
 
   constructor() {
+  }
+
+  ngAfterContentInit(): void {
+    this.setTopDistances();
+  }
+
+  setTopDistances() {
+    this.inputTabs.forEach((item) => {
+      item.top = (item.startHour - this.startTime) / (20 - 8) * 100;
+    });
   }
 
   ngOnInit() {
