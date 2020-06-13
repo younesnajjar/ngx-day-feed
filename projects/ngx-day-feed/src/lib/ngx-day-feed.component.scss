@@ -1,0 +1,12 @@
+.feed-container {
+  width: 100%;
+  position: relative;
+
+  .feed-moment {
+    opacity: 0.25;
+    width: 100%;
+    text-align: left;
+    border-bottom: solid 1px #979797;
+    margin-bottom: 15px;
+  }
+}
