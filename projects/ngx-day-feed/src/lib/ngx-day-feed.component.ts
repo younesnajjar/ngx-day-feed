@@ -22,11 +22,13 @@ import {AvailabilityComponent} from './availability/availability.component';
 })
 export class NgxDayFeedComponent implements OnInit, AfterContentInit {
   @ContentChildren(AvailabilityComponent) inputTabs: QueryList<AvailabilityComponent>;
+
+
+  @Input() minHour = 8;
+  @Input() maxHour = 21;
+
   public hours: string[];
 
-
-  @Input() startTime = 8;
-  @Input() endTime = 20;
 
   constructor() {
   }
@@ -37,12 +39,13 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
 
   setTopDistances() {
     this.inputTabs.forEach((item) => {
-      item.top = (item.startHour - this.startTime) / (20 - 8) * 100;
+      item.top = (item.startHour - this.minHour) / (this.maxHour - this.minHour) * 100;
+      item.height = (item.endHour - item.startHour) / (this.maxHour - this.minHour) * 100;
     });
   }
 
   ngOnInit() {
-    this.generateHours(this.startTime, this.endTime, 60);
+    this.generateHours(this.minHour, this.maxHour, 60);
   }
 
   private generateHours(startHour: number, endHour: number, stepSizeMinutes: number) {

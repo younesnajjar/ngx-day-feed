@@ -1,0 +1,17 @@
+.one-availability-container {
+  position: absolute;
+  width: 100%;
+  opacity: 0.8;
+
+
+  .availability-content {
+    background: #37aeeb;
+    border-radius: 3px;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 8px 10px 3px rgba(233, 233, 233, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
