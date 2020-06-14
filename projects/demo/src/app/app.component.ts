@@ -43,7 +43,7 @@ export class AppComponent {
   };
 
   showMessage($event: any) {
-    this.data = this.data.filter((item, index) => index !== $event.index);
+    // this.data = this.data.filter((item, index) => index !== $event.index);
     console.log(this.data);
   }
 }
