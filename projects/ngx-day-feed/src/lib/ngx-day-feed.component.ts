@@ -46,9 +46,12 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
   setTopDistances() {
     setTimeout(() => {
       this.inputTabs.forEach((item, index) => {
+        const totalMinutes: number = (this.maxHour - this.minHour) * 60;
         item.index = index;
-        item.top = (item.startHour - this.minHour) / (this.maxHour - this.minHour) * 100;
-        item.height = (item.endHour - item.startHour) / (this.maxHour - this.minHour) * 100;
+        item.startMinute = (item.startMinute) ? item.startMinute : 0;
+        item.endMinute = (item.endMinute) ? item.endMinute : 0;
+        item.top = ((item.startHour - this.minHour) * 60 + item.startMinute) / totalMinutes * 100;
+        item.height = ((item.endHour - item.startHour) * 60 + item.endMinute - item.startMinute) / totalMinutes * 100;
       });
     });
 

@@ -20,7 +20,7 @@ $hover-transition-timing: width $t-delay, height $t-delay, margin-top $t-delay, 
   }
 }
 
-.one-availability-container:hover {
+.hover-animation:hover {
   opacity: 1;
 
   .availability-content {

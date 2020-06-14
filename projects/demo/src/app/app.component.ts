@@ -11,10 +11,13 @@ export class AppComponent {
   public data: any[] = [
     {
       startHour: 8,
+      startMin: 20,
       endHour: 10,
+      endMin: 30,
       imgLink: 'https://avatars3.githubusercontent.com/u/37715926?s=400&u=19561cb03e388feebe6d6380b4c45095ef71fb62&v=4'
     }, {
       startHour: 11,
+      startMin: 30,
       endHour: 15,
       imgLink: 'https://scontent.frak1-1.fna.fbcdn.net/v/t1.0-9/74802279_2538828949683130_492962' +
         '7466504339456_o.jpg?_nc_cat=105&_nc_sid=09cbfe&_nc_eui2=AeE_ajamA4T' +
@@ -40,6 +43,7 @@ export class AppComponent {
   };
 
   showMessage($event: any) {
-    console.log($event.index);
+    this.data = this.data.filter((item, index) => index !== $event.index);
+    console.log(this.data);
   }
 }
