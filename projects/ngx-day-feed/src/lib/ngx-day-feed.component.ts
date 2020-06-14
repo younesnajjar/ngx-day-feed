@@ -1,5 +1,6 @@
-import {AfterContentInit, Component, ContentChildren, Input, OnInit, QueryList} from '@angular/core';
+import {AfterContentInit, Component, ContentChildren, EventEmitter, Input, OnInit, Output, QueryList} from '@angular/core';
 import {AvailabilityComponent} from './availability/availability.component';
+import {EmitterService} from 'ngx-day-feed/services/emitter.service';
 
 @Component({
   selector: 'ngx-day-feed',
@@ -23,6 +24,7 @@ import {AvailabilityComponent} from './availability/availability.component';
 export class NgxDayFeedComponent implements OnInit, AfterContentInit {
   @ContentChildren(AvailabilityComponent) inputTabs: QueryList<AvailabilityComponent>;
 
+  @Output() itemClick = new EventEmitter<{ index: number }>();
 
   @Input() minHour = 8;
   @Input() maxHour = 21;
@@ -30,18 +32,24 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
   public hours: string[];
 
 
-  constructor() {
+  constructor(private emitterService: EmitterService) {
+    this.setItemClickEvent();
   }
+
 
   ngAfterContentInit(): void {
     this.setTopDistances();
   }
 
   setTopDistances() {
-    this.inputTabs.forEach((item) => {
-      item.top = (item.startHour - this.minHour) / (this.maxHour - this.minHour) * 100;
-      item.height = (item.endHour - item.startHour) / (this.maxHour - this.minHour) * 100;
+    setTimeout(() => {
+      this.inputTabs.forEach((item, index) => {
+        item.index = index;
+        item.top = (item.startHour - this.minHour) / (this.maxHour - this.minHour) * 100;
+        item.height = (item.endHour - item.startHour) / (this.maxHour - this.minHour) * 100;
+      });
     });
+
   }
 
   ngOnInit() {
@@ -56,6 +64,12 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
       i = i + stepSizeMinutes;
     }
     this.hours = hours;
+  }
+
+  setItemClickEvent() {
+    this.emitterService.itemClick$.subscribe((i) => {
+      this.itemClick.emit({index: i});
+    });
   }
 
 }

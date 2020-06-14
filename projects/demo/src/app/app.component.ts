@@ -30,4 +30,8 @@ export class AppComponent {
         'k1-1.fna&oh=03e7d8b726bc5bfbf469b46ceefd0542&oe=5F0BF0CD'
     },
   ];
+
+  showMessage($event: any) {
+    console.log($event.index);
+  }
 }
