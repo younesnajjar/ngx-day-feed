@@ -7,7 +7,7 @@
       "projectType": "library",
       "root": "projects/ngx-day-feed",
       "sourceRoot": "projects/ngx-day-feed/src",
-      "prefix": "lib",
+      "prefix": "ngx",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",

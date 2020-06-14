@@ -1,9 +1,9 @@
 <div class="container">
-  <lib-ngx-day-feed maxHour="20" minHour="8">
+  <ngx-day-feed maxHour="20" minHour="8">
 
-    <lib-availability *ngFor="let item of data" [endHour]="item.endHour" [startHour]="item.startHour">
+    <ngx-availability *ngFor="let item of data" [endHour]="item.endHour" [startHour]="item.startHour">
       <img [src]="item.imgLink" alt="profile image"/>
-    </lib-availability>
-    
-  </lib-ngx-day-feed>
+    </ngx-availability>
+
+  </ngx-day-feed>
 </div>

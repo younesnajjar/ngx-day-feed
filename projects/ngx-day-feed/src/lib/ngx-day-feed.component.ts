@@ -2,7 +2,7 @@ import {AfterContentInit, Component, ContentChildren, Input, OnInit, QueryList} 
 import {AvailabilityComponent} from './availability/availability.component';
 
 @Component({
-  selector: 'lib-ngx-day-feed',
+  selector: 'ngx-day-feed',
   template: `
 
     <div class="feed-container">

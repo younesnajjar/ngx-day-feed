@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 
 @Component({
-  selector: 'lib-availability',
+  selector: 'ngx-availability',
   template: `
     <div [style.height]="height + '%'" class="one-availability-container" [style.top]="top + '%'">
       <div class="availability-content">
