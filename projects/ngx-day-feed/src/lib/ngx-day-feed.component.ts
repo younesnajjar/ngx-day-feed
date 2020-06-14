@@ -1,6 +1,7 @@
 import {AfterContentInit, Component, ContentChildren, EventEmitter, Input, OnInit, Output, QueryList} from '@angular/core';
 import {AvailabilityComponent} from './availability/availability.component';
 import {EmitterService} from 'ngx-day-feed/services/emitter.service';
+import {DayFeedConfig} from 'ngx-day-feed/models/config.model';
 
 @Component({
   selector: 'ngx-day-feed',
@@ -9,7 +10,7 @@ import {EmitterService} from 'ngx-day-feed/services/emitter.service';
     <div class="feed-container">
       <div class="hours-container">
         <div *ngFor="let hour of hours; let i = index" class="feed-moment">
-          {{ hour }}
+          {{ hourFormatter(hour) }}
         </div>
       </div>
 
@@ -28,6 +29,7 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
 
   @Input() minHour = 8;
   @Input() maxHour = 21;
+  @Input() config: DayFeedConfig;
 
   public hours: string[];
 
@@ -70,6 +72,11 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
     this.emitterService.itemClick$.subscribe((i) => {
       this.itemClick.emit({index: i});
     });
+  }
+
+  hourFormatter(hour: string) {
+    const {hours} = this.config;
+    return (hours.callback) ? hours.callback(hour) : hour;
   }
 
 }
