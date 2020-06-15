@@ -7,8 +7,8 @@ import {growAnimation} from 'ngx-day-feed/animations/grow.animation';
   template: `
     <div [@Grow]="stateGrow" (click)="itemClick()" [style.height]="dimensions.height + '%'"
          class="one-availability-container hover-animation"
-         [style.top]="dimensions.top + '%'" [style.width]="90 / dimensions.count + '%'"
-         [style.left]="(10 / dimensions.count )*(dimensions.position - 1) + (100 / dimensions.count) * (dimensions.position - 1) + '%'">
+         [style.top]="dimensions.top + '%'" [style.width]="(100 / dimensions.count - dimensions.count) + '%'"
+         [style.left]="(dimensions.position - 1) + (100 / dimensions.count) * (dimensions.position - 1) + '%'">
       <div class="availability-content">
         <ng-content></ng-content>
       </div>
