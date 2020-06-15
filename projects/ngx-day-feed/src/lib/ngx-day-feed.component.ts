@@ -63,7 +63,12 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit, OnChanges 
   setTopDistances() {
     setTimeout(() => {
       const items: AvailabilityComponent[] = this.inputTabs.toArray();
-      items.sort((item1, item2) => item1.endHour - item2.endHour);
+      items.sort((item1, item2) => {
+        if (item1.endHour - item2.endHour === 0) {
+          return item1.startHour - item2.startHour;
+        }
+        return item1.endHour - item2.endHour;
+      });
 
       items.forEach((item, index) => {
         item.index = index;
@@ -77,21 +82,38 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit, OnChanges 
       items.forEach((item, index, mItems) => {
         console.warn('item: ' + item.index);
         const intersectedItems = this.getIntersectedItems(item, mItems);
-        const notParalleleCount = this.getNotInersectedCount(intersectedItems);
-        const count = intersectedItems.length - notParalleleCount + 1;
+        const notParallelCount = this.getNotInersectedCount(intersectedItems);
+        const count = intersectedItems.length - notParallelCount + 1;
         const position = this.getPosition(intersectedItems);
         item.dimensions.count = count;
         item.dimensions.position = position;
         this.printItem(item);
         console.log('parallele:');
         this.printItems(intersectedItems);
-        console.log('not Parallele Items Count: ' + notParalleleCount);
+        console.log('not Parallele Items Count: ' + notParallelCount);
         console.log('count: ' + count);
         console.log('position: ' + position);
 
 
       });
+      items.forEach((item, index, mItems) => {
+        const intersectedItems = this.getIntersectedItems(item, mItems);
+        const maxCount = this.getMaxCount([item, ...intersectedItems]);
+        [item, ...intersectedItems].forEach((mItem) => {
+          mItem.dimensions.count = maxCount;
+        });
+      });
     });
+  }
+
+  private getMaxCount(items: AvailabilityComponent[]) {
+    let max = 0;
+    for (const item of items) {
+      if (item.dimensions.count > max) {
+        max = item.dimensions.count;
+      }
+    }
+    return max;
   }
 
   getIntersectedItems(currentItem: AvailabilityComponent, items: AvailabilityComponent[]): AvailabilityComponent[] {
