@@ -1,4 +1,15 @@
-import {AfterContentInit, Component, ContentChildren, EventEmitter, Input, OnInit, Output, QueryList} from '@angular/core';
+import {
+  AfterContentInit,
+  Component,
+  ContentChildren,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  QueryList,
+  SimpleChanges
+} from '@angular/core';
 import {AvailabilityComponent} from './availability/availability.component';
 import {EmitterService} from 'ngx-day-feed/services/emitter.service';
 import {DayFeedConfig} from 'ngx-day-feed/models/config.model';
@@ -22,7 +33,7 @@ import {DayFeedConfig} from 'ngx-day-feed/models/config.model';
   `,
   styleUrls: ['./ngx-day-feed.component.scss']
 })
-export class NgxDayFeedComponent implements OnInit, AfterContentInit {
+export class NgxDayFeedComponent implements OnInit, AfterContentInit, OnChanges {
   @ContentChildren(AvailabilityComponent) inputTabs: QueryList<AvailabilityComponent>;
 
   @Output() itemClick = new EventEmitter<{ index: number }>();
@@ -32,6 +43,7 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
   @Input() config: DayFeedConfig;
 
   public hours: string[];
+  private totalMinutes: number;
 
 
   constructor(private emitterService: EmitterService) {
@@ -40,21 +52,105 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
 
 
   ngAfterContentInit(): void {
+    this.setTotalMinutes();
     this.setTopDistances();
+  }
+
+  setTotalMinutes() {
+    this.totalMinutes = (this.maxHour - this.minHour) * 60;
   }
 
   setTopDistances() {
     setTimeout(() => {
-      this.inputTabs.forEach((item, index) => {
-        const totalMinutes: number = (this.maxHour - this.minHour) * 60;
+      const items: AvailabilityComponent[] = this.inputTabs.toArray();
+      items.sort((item1, item2) => item1.endHour - item2.endHour);
+
+      items.forEach((item, index) => {
         item.index = index;
         item.startMinute = (item.startMinute) ? item.startMinute : 0;
         item.endMinute = (item.endMinute) ? item.endMinute : 0;
-        item.top = ((item.startHour - this.minHour) * 60 + item.startMinute) / totalMinutes * 100;
-        item.height = ((item.endHour - item.startHour) * 60 + item.endMinute - item.startMinute) / totalMinutes * 100;
+        item.dimensions = {
+          top: ((item.startHour - this.minHour) * 60 + item.startMinute) / this.totalMinutes * 100,
+          height: ((item.endHour - item.startHour) * 60 + item.endMinute - item.startMinute) / this.totalMinutes * 100,
+        };
+      });
+      items.forEach((item, index, mItems) => {
+        console.warn('item: ' + item.index);
+        const intersectedItems = this.getIntersectedItems(item, mItems);
+        const notParalleleCount = this.getNotInersectedCount(intersectedItems);
+        const count = intersectedItems.length - notParalleleCount + 1;
+        const position = this.getPosition(intersectedItems);
+        item.dimensions.count = count;
+        item.dimensions.position = position;
+        this.printItem(item);
+        console.log('parallele:');
+        this.printItems(intersectedItems);
+        console.log('not Parallele Items Count: ' + notParalleleCount);
+        console.log('count: ' + count);
+        console.log('position: ' + position);
+
+
       });
     });
+  }
 
+  getIntersectedItems(currentItem: AvailabilityComponent, items: AvailabilityComponent[]): AvailabilityComponent[] {
+    return items.filter((item) => {
+      return currentItem.index !== item.index && item.dimensions.top < currentItem.dimensions.top + currentItem.dimensions.height
+        && item.dimensions.top + item.dimensions.height > currentItem.dimensions.top;
+    });
+  }
+
+  getNotInersectedCount(items: AvailabilityComponent[]): number {
+    let count = 0;
+    const forbiddenListIndexes: number[] = [];
+    for (let i = 0; i < items.length; i++) {
+      for (let j = i + 1; j < items.length; j++) {
+        if ((items[j].dimensions.top >= items[i].dimensions.top + items[i].dimensions.height
+          || items[j].dimensions.top + items[j].dimensions.height <= items[i].dimensions.top) && !forbiddenListIndexes.includes(j)) {
+          console.log(i + ' - ' + j);
+          forbiddenListIndexes.push(j);
+          count++;
+          break;
+        }
+      }
+    }
+
+    return count;
+  }
+
+  printItem(item: AvailabilityComponent) {
+    console.log('i: ' + item.index + ' // from: ' + item.startHour + ' to: ' + item.endHour);
+  }
+
+  printItems(items: AvailabilityComponent[]) {
+    for (const item of items) {
+      this.printItem(item);
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+  }
+
+  private getPosition(items: AvailabilityComponent[]) {
+    let position = 1;
+    let positions = items.filter((item) => item.dimensions.position)
+      .map((item) => item.dimensions.position)
+      .sort((position1, position2) => position1 - position2);
+    positions = positions.filter((arrayPosition, i) => positions.indexOf(arrayPosition) === i);
+    for (const arrayPosition of positions) {
+      if (arrayPosition) {
+        if (position === arrayPosition) {
+          position++;
+        } else {
+          break;
+        }
+      }
+    }
+    if (items.length > 0 && position === items[items.length - 1].dimensions.position) {
+      return position + 1;
+    }
+    return position;
   }
 
   ngOnInit() {
@@ -81,5 +177,6 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
     const {hours} = this.config;
     return (hours.callback) ? hours.callback(hour) : hour;
   }
+
 
 }
