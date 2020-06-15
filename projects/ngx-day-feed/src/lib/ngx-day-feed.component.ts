@@ -80,19 +80,12 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit, OnChanges 
         };
       });
       items.forEach((item, index, mItems) => {
-        console.warn('item: ' + item.index);
         const intersectedItems = this.getIntersectedItems(item, mItems);
         const notParallelCount = this.getNotInersectedCount(intersectedItems);
         const count = intersectedItems.length - notParallelCount + 1;
         const position = this.getPosition(intersectedItems);
         item.dimensions.count = count;
         item.dimensions.position = position;
-        this.printItem(item);
-        console.log('parallele:');
-        this.printItems(intersectedItems);
-        console.log('not Parallele Items Count: ' + notParallelCount);
-        console.log('count: ' + count);
-        console.log('position: ' + position);
 
 
       });
@@ -106,7 +99,7 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit, OnChanges 
     });
   }
 
-  private getMaxCount(items: AvailabilityComponent[]) {
+  getMaxCount(items: AvailabilityComponent[]) {
     let max = 0;
     for (const item of items) {
       if (item.dimensions.count > max) {
@@ -130,7 +123,6 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit, OnChanges 
       for (let j = i + 1; j < items.length; j++) {
         if ((items[j].dimensions.top >= items[i].dimensions.top + items[i].dimensions.height
           || items[j].dimensions.top + items[j].dimensions.height <= items[i].dimensions.top) && !forbiddenListIndexes.includes(j)) {
-          console.log(i + ' - ' + j);
           forbiddenListIndexes.push(j);
           count++;
           break;
@@ -139,16 +131,6 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit, OnChanges 
     }
 
     return count;
-  }
-
-  printItem(item: AvailabilityComponent) {
-    console.log('i: ' + item.index + ' // from: ' + item.startHour + ' to: ' + item.endHour);
-  }
-
-  printItems(items: AvailabilityComponent[]) {
-    for (const item of items) {
-      this.printItem(item);
-    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
