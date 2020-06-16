@@ -14,6 +14,7 @@ import {AvailabilityComponent} from './availability/availability.component';
 import {EmitterService} from 'ngx-day-feed/services/emitter.service';
 import {DayFeedConfig} from 'ngx-day-feed/models/config.model';
 import {setItemNeededValues} from 'ngx-day-feed/utils/defaults-setter';
+import {ItemConfig} from 'ngx-day-feed/models/item-config.model';
 
 @Component({
   selector: 'ngx-day-feed',
@@ -65,10 +66,10 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit, OnChanges 
 
   sortItems(items) {
     items.sort((item1, item2) => {
-      if (item1.endHour - item2.endHour === 0) {
-        return item2.startHour - item1.startHour;
+      if (item1.itemConfig.endHour - item2.itemConfig.endHour === 0) {
+        return item2.itemConfig.startHour - item1.itemConfig.startHour;
       }
-      return item1.endHour - item2.endHour;
+      return item1.itemConfig.endHour - item2.itemConfig.endHour;
     });
   }
 
@@ -81,11 +82,13 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit, OnChanges 
     // Setting Vertical Dimensions 'height' && 'top'
 
     items.forEach((item, index) => {
+      const itemConfig: ItemConfig = item.itemConfig;
       setItemNeededValues(item, this.config);
       item.index = index;
       item.dimensions = {
-        top: ((item.startHour - this.minHour) * 60 + item.startMinute) / this.totalMinutes * 100,
-        height: ((item.endHour - item.startHour) * 60 + item.endMinute - item.startMinute) / this.totalMinutes * 100,
+        top: ((itemConfig.startHour - this.minHour) * 60 + itemConfig.startMinute) / this.totalMinutes * 100,
+        height: ((itemConfig.endHour - itemConfig.startHour) * 60 + itemConfig.endMinute - itemConfig.startMinute)
+          / this.totalMinutes * 100,
       };
     });
   }

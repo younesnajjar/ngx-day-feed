@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {EmitterService} from 'ngx-day-feed/services/emitter.service';
 import {growAnimation} from 'ngx-day-feed/animations/grow.animation';
 import {BACKGROUND} from 'ngx-day-feed/utils/consts';
+import {ItemConfig} from 'ngx-day-feed/models/item-config.model';
 
 @Component({
   selector: 'ngx-availability',
@@ -35,6 +36,7 @@ export class AvailabilityComponent implements OnInit {
   @Input() startMinute: number;
   @Input() endHour: number;
   @Input() endMinute: number;
+  @Input() itemConfig: ItemConfig;
   @Input() dimensions: { top?: number, height?: number, count?: number, position?: number, span?: number };
   @Input() index: number;
   @Input() gap: number;
@@ -45,6 +47,12 @@ export class AvailabilityComponent implements OnInit {
   constructor(private emitterService: EmitterService) {
     this.startMinute = 0;
     this.endMinute = 0;
+    this.itemConfig = {
+      startHour: 0,
+      startMinute: 0,
+      endHour: 0,
+      endMinute: 0,
+    };
     this.gap = 1;
     this.dimensions = {};
     this.stateGrow = 'inactive';

@@ -1,6 +1,5 @@
 import {Component} from '@angular/core';
 import {DayFeedConfig} from 'ngx-day-feed';
-import {BACKGROUND} from 'ngx-day-feed/utils/consts';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +16,8 @@ export class AppComponent {
         '38828949683130_4929627466504339456_o.jpg?_nc_cat=105&_nc_sid=09cbfe&' +
         '_nc_eui2=AeE_ajamA4T3ZcmKfwIw5lUk4i0MefoJL93iLQx5-gkv3VQob374s3AebFSs-4' +
         'z4skB1Ip250bRGn-DUsA_CPIVw&_nc_ohc=05gvfvnI5xcAX8x04bm&_nc_ht=scontent.fra' +
-        'k1-1.fna&oh=03e7d8b726bc5bfbf469b46ceefd0542&oe=5F0BF0CD'
+        'k1-1.fna&oh=03e7d8b726bc5bfbf469b46ceefd0542&oe=5F0BF0CD',
+      backgroundColor: 'orange'
     },
     {
       startHour: 11,
@@ -26,7 +26,7 @@ export class AppComponent {
         '38828949683130_4929627466504339456_o.jpg?_nc_cat=105&_nc_sid=09cbfe&' +
         '_nc_eui2=AeE_ajamA4T3ZcmKfwIw5lUk4i0MefoJL93iLQx5-gkv3VQob374s3AebFSs-4' +
         'z4skB1Ip250bRGn-DUsA_CPIVw&_nc_ohc=05gvfvnI5xcAX8x04bm&_nc_ht=scontent.fra' +
-        'k1-1.fna&oh=03e7d8b726bc5bfbf469b46ceefd0542&oe=5F0BF0CD'
+        'k1-1.fna&oh=03e7d8b726bc5bfbf469b46ceefd0542&oe=5F0BF0CD',
     },
     {
       startHour: 5,
@@ -41,7 +41,8 @@ export class AppComponent {
     {
       startHour: 8,
       endHour: 10,
-      imgLink: 'https://avatars3.githubusercontent.com/u/37715926?s=400&u=19561cb03e388feebe6d6380b4c45095ef71fb62&v=4'
+      imgLink: 'https://avatars3.githubusercontent.com/u/37715926?s=400&u=19561cb03e388feebe6d6380b4c45095ef71fb62&v=4',
+      backgroundColor: 'purple'
     }, {
       startHour: 11,
       endHour: 13,
@@ -77,7 +78,6 @@ export class AppComponent {
   config: DayFeedConfig = {
     display: {
       gap: 2,
-      itemsBackGroundColor: BACKGROUND
     },
     hours: {
       callback: (value: string) => {

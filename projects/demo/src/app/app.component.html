@@ -1,8 +1,15 @@
 <div class="container">
   <ngx-day-feed (itemClick)="showMessage($event)" [config]="config" maxHour="20" minHour="5">
 
-    <ngx-availability *ngFor="let item of data" [endHour]="item.endHour" [endMinute]="item.endMin"
-                      [startHour]="item.startHour" [startMinute]="item.startMin">
+    <ngx-availability *ngFor="let item of data; let i = index" [endHour]="item.endHour" [endMinute]="item.endMin"
+                      [itemConfig]="{
+                      startHour: item.startHour,
+                      endHour: item.endHour,
+                      startMinute: item.startMinute,
+                      endMinute: item.endMinute,
+                      backgroundColor: item.backgroundColor
+                      }" [startHour]="item.startHour"
+                      [startMinute]="item.startMin">
       <img [src]="item.imgLink" alt="profile image"/>
     </ngx-availability>
 

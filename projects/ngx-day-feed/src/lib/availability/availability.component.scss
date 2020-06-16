@@ -21,6 +21,7 @@ $hover-transition-timing: width $t-delay, height $t-delay, margin-top $t-delay, 
 
 .hover-animation:hover {
   opacity: 1;
+  z-index: 1;
 
   .availability-content {
     width: calc(100% + 1em);
