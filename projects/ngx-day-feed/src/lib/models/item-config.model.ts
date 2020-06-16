@@ -6,4 +6,5 @@ export class ItemConfig {
   backgroundColor?: string;
   opacity?: number;
   hoverOpacity?: number;
+  disableHoverAnimation?: boolean;
 }

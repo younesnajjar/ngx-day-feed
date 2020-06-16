@@ -4,12 +4,14 @@ export class DayFeedConfig {
     items?: {
       backgroundColor?: string,
       opacity?: number;
-      hoverOpacity?: number
+      hoverOpacity?: number,
+      animations?: {
+        hover?: boolean
+      }
     }
 
   };
   animations?: {
-    itemPop?: boolean
   };
   hours?: {
     callback?: (value: string) => string,

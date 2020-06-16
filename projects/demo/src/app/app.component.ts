@@ -71,18 +71,14 @@ export class AppComponent {
         '_nc_eui2=AeE_ajamA4T3ZcmKfwIw5lUk4i0MefoJL93iLQx5-gkv3VQob374s3AebFSs-4' +
         'z4skB1Ip250bRGn-DUsA_CPIVw&_nc_ohc=05gvfvnI5xcAX8x04bm&_nc_ht=scontent.fra' +
         'k1-1.fna&oh=03e7d8b726bc5bfbf469b46ceefd0542&oe=5F0BF0CD',
-      opacity: 0.2
+      opacity: 1,
+      hoverOpacity: 0.5,
     },
 
 
   ];
   config: DayFeedConfig = {
-    display: {
-      gap: 2,
-      items: {
-        hoverOpacity: 0.6
-      }
-    },
+
     hours: {
       callback: (value: string) => {
         return value.split(':').join('-');
