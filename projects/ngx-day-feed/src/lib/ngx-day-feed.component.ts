@@ -53,48 +53,62 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit, OnChanges 
 
 
   ngAfterContentInit(): void {
+    const items: AvailabilityComponent[] = this.inputTabs.toArray();
     this.setTotalMinutes();
-    this.setTopDistances();
+    this.sortItems(items);
+    setTimeout(() => {
+      this.setBasicInfo(items);
+      this.setHorizontalDimensions(items);
+      this.setStandardWidth(items);
+    });
+  }
+
+  sortItems(items) {
+    items.sort((item1, item2) => {
+      if (item1.endHour - item2.endHour === 0) {
+        return item2.startHour - item1.startHour;
+      }
+      return item1.endHour - item2.endHour;
+    });
   }
 
   setTotalMinutes() {
     this.totalMinutes = (this.maxHour - this.minHour) * 60;
   }
 
-  setTopDistances() {
-    setTimeout(() => {
-      const items: AvailabilityComponent[] = this.inputTabs.toArray();
-      items.sort((item1, item2) => {
-        if (item1.endHour - item2.endHour === 0) {
-          return item2.startHour - item1.startHour;
-        }
-        return item1.endHour - item2.endHour;
-      });
+  setBasicInfo(items: AvailabilityComponent[]) {
+    // Setting the availability Index
+    // Setting Vertical Dimensions 'height' && 'top'
 
-      items.forEach((item, index) => {
-        setItemNeededValues(item, this.config);
-        item.index = index;
-        item.dimensions = {
-          top: ((item.startHour - this.minHour) * 60 + item.startMinute) / this.totalMinutes * 100,
-          height: ((item.endHour - item.startHour) * 60 + item.endMinute - item.startMinute) / this.totalMinutes * 100,
-        };
-      });
-      items.forEach((item, index, mItems) => {
-        const intersectedItems = this.getIntersectedItems(item, mItems);
-        const notParallelCount = this.getNotInersectedCount(intersectedItems);
-        const count = intersectedItems.length - notParallelCount + 1;
-        const position = this.getPosition(intersectedItems);
-        item.dimensions.count = count;
-        item.dimensions.position = position;
+    items.forEach((item, index) => {
+      setItemNeededValues(item, this.config);
+      item.index = index;
+      item.dimensions = {
+        top: ((item.startHour - this.minHour) * 60 + item.startMinute) / this.totalMinutes * 100,
+        height: ((item.endHour - item.startHour) * 60 + item.endMinute - item.startMinute) / this.totalMinutes * 100,
+      };
+    });
+  }
 
+  setHorizontalDimensions(items: AvailabilityComponent[]) {
+    // Setting Horizontal Dimensions 'width related to count' && 'left related to position'
 
-      });
-      items.forEach((item, index, mItems) => {
-        const intersectedItems = this.getIntersectedItems(item, mItems);
-        const maxCount = this.getMaxCount([item, ...intersectedItems]);
-        [item, ...intersectedItems].forEach((mItem) => {
-          mItem.dimensions.count = maxCount;
-        });
+    items.forEach((item, index, mItems) => {
+      const intersectedItems = this.getIntersectedItems(item, mItems);
+      const notParallelCount = this.getNotInersectedCount(intersectedItems);
+      const count = intersectedItems.length - notParallelCount + 1;
+      const position = this.getPosition(intersectedItems);
+      item.dimensions.count = count;
+      item.dimensions.position = position;
+    });
+  }
+
+  setStandardWidth(items: AvailabilityComponent[]) {
+    items.forEach((item, index, mItems) => {
+      const intersectedItems = this.getIntersectedItems(item, mItems);
+      const maxCount = this.getMaxCount([item, ...intersectedItems]);
+      [item, ...intersectedItems].forEach((mItem) => {
+        mItem.dimensions.count = maxCount;
       });
     });
   }
