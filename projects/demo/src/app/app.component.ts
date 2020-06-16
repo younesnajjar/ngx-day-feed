@@ -81,7 +81,7 @@ export class AppComponent {
 
     hours: {
       callback: (value: string) => {
-        return value.split(':').join('-');
+        return value.split(':').map((v, i) => (i === 1) ? v + 'min' : v + 'h').join(':');
       }
     }
   };
