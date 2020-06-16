@@ -13,6 +13,7 @@ import {
 import {AvailabilityComponent} from './availability/availability.component';
 import {EmitterService} from 'ngx-day-feed/services/emitter.service';
 import {DayFeedConfig} from 'ngx-day-feed/models/config.model';
+import {setItemNeededValues} from 'ngx-day-feed/utils/defaults-setter';
 
 @Component({
   selector: 'ngx-day-feed',
@@ -65,15 +66,14 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit, OnChanges 
       const items: AvailabilityComponent[] = this.inputTabs.toArray();
       items.sort((item1, item2) => {
         if (item1.endHour - item2.endHour === 0) {
-          return item1.startHour - item2.startHour;
+          return item2.startHour - item1.startHour;
         }
         return item1.endHour - item2.endHour;
       });
 
       items.forEach((item, index) => {
+        setItemNeededValues(item, this.config);
         item.index = index;
-        item.startMinute = (item.startMinute) ? item.startMinute : 0;
-        item.endMinute = (item.endMinute) ? item.endMinute : 0;
         item.dimensions = {
           top: ((item.startHour - this.minHour) * 60 + item.startMinute) / this.totalMinutes * 100,
           height: ((item.endHour - item.startHour) * 60 + item.endMinute - item.startMinute) / this.totalMinutes * 100,

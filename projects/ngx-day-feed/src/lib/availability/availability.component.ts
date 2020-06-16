@@ -7,8 +7,9 @@ import {growAnimation} from 'ngx-day-feed/animations/grow.animation';
   template: `
     <div [@Grow]="stateGrow" (click)="itemClick()" [style.height]="dimensions.height + '%'"
          class="one-availability-container hover-animation"
-         [style.top]="dimensions.top + '%'" [style.width]="(100 / dimensions.count - dimensions.count) + '%'"
-         [style.left]="(dimensions.position - 1) + (100 / dimensions.count) * (dimensions.position - 1) + '%'">
+         [style.top]="dimensions.top + '%'" [style.width]="((100 - (dimensions.count - 1)  * gap ) / dimensions.count) + '%'"
+         [style.left]="((100 - (dimensions.count - 1) * gap) / dimensions.count)
+          * (dimensions.position - 1) + (dimensions.position - 1)*gap + '%'">
       <div class="availability-content">
         <ng-content></ng-content>
       </div>
@@ -26,14 +27,18 @@ export class AvailabilityComponent implements OnInit {
   @Input() endMinute: number;
   @Input() dimensions: { top?: number, height?: number, count?: number, position?: number, span?: number };
   @Input() index: number;
+  @Input() gap: number;
+
   private stateGrow: string;
 
   constructor(private emitterService: EmitterService) {
     this.startMinute = 0;
     this.endMinute = 0;
+    this.gap = 1;
     this.dimensions = {};
     this.stateGrow = 'inactive';
   }
+
 
   ngOnInit() {
     setTimeout(() => {

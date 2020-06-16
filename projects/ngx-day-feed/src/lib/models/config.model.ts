@@ -1,4 +1,7 @@
-export interface DayFeedConfig {
+export class DayFeedConfig {
+  display?: {
+    gap?: number
+  };
   animations?: {
     itemPop?: boolean
   };
