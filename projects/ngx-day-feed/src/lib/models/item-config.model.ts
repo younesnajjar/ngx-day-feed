@@ -7,4 +7,5 @@ export class ItemConfig {
   opacity?: number;
   hoverOpacity?: number;
   disableHoverAnimation?: boolean;
+  disableNewAnimation?: boolean;
 }

@@ -81,7 +81,7 @@ export class AppComponent {
   config: DayFeedConfig = {
     display: {
       items: {
-        disableHoverAnimation: true
+        disableHoverAnimation: true,
       }
     },
     hours: {

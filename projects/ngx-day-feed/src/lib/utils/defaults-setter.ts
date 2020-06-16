@@ -18,6 +18,7 @@ export function setItemNeededValues(item: AvailabilityComponent, config: DayFeed
   setConfigDisplayItems(item, config, 'opacity');
   setConfigDisplayItems(item, config, 'hoverOpacity');
   setConfigDisplayItems(item, config, 'disableHoverAnimation');
+  setConfigDisplayItems(item, config, 'disableNewAnimation');
 }
 
 function setConfigDisplayItems(item: AvailabilityComponent, config: DayFeedConfig, attr: string) {

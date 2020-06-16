@@ -6,7 +6,7 @@ import {ItemConfig} from 'ngx-day-feed/models/item-config.model';
 @Component({
   selector: 'ngx-availability',
   template: `
-    <div [@Grow]="stateGrow" (click)="itemClick()"
+    <div [@Grow]="!itemConfig.disableNewAnimation && stateGrow" (click)="itemClick()"
          class="one-availability-container"
          [style.width]=""
          [style.left]=""
