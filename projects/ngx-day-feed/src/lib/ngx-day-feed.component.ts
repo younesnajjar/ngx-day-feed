@@ -23,7 +23,7 @@ import {ItemConfig} from 'ngx-day-feed/models/item-config.model';
     <div class="feed-container">
       <div class="hours-container">
         <div *ngFor="let hour of hours; let i = index" class="feed-moment">
-          {{ hourFormatter(hour) }}
+          <div>          {{ hourFormatter(hour) }} </div>
         </div>
       </div>
 
