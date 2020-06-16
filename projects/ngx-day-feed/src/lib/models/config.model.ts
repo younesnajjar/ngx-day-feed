@@ -1,7 +1,12 @@
 export class DayFeedConfig {
   display?: {
     gap?: number,
-    itemsBackGroundColor?: string,
+    items?: {
+      backgroundColor?: string,
+      opacity?: number;
+      hoverOpacity?: number
+    }
+
   };
   animations?: {
     itemPop?: boolean

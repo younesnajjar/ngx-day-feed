@@ -1,7 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, HostListener, Input, OnInit} from '@angular/core';
 import {EmitterService} from 'ngx-day-feed/services/emitter.service';
 import {growAnimation} from 'ngx-day-feed/animations/grow.animation';
-import {BACKGROUND} from 'ngx-day-feed/utils/consts';
 import {ItemConfig} from 'ngx-day-feed/models/item-config.model';
 
 @Component({
@@ -12,6 +11,7 @@ import {ItemConfig} from 'ngx-day-feed/models/item-config.model';
          [style.width]=""
          [style.left]=""
          [ngStyle]="{
+            'opacity': (isHovered) ? itemConfig.hoverOpacity : itemConfig.opacity,
             'height': dimensions.height + '%',
             'top': dimensions.top + '%',
             'width': ((100 - (dimensions.count - 1)  * gap ) / dimensions.count) + '%',
@@ -20,7 +20,7 @@ import {ItemConfig} from 'ngx-day-feed/models/item-config.model';
     >
       <div class="availability-content"
            [ngStyle]="{
-            'background': backgroundColor
+            'background': itemConfig.backgroundColor
       }">
         <ng-content></ng-content>
       </div>
@@ -32,21 +32,18 @@ import {ItemConfig} from 'ngx-day-feed/models/item-config.model';
   ]
 })
 export class AvailabilityComponent implements OnInit {
-  @Input() startHour: number;
-  @Input() startMinute: number;
-  @Input() endHour: number;
-  @Input() endMinute: number;
+
   @Input() itemConfig: ItemConfig;
   @Input() dimensions: { top?: number, height?: number, count?: number, position?: number, span?: number };
   @Input() index: number;
   @Input() gap: number;
-  @Input() backgroundColor: string = BACKGROUND;
+
 
   private stateGrow: string;
+  public isHovered: boolean;
 
   constructor(private emitterService: EmitterService) {
-    this.startMinute = 0;
-    this.endMinute = 0;
+
     this.itemConfig = {
       startHour: 0,
       startMinute: 0,
@@ -67,5 +64,13 @@ export class AvailabilityComponent implements OnInit {
 
   itemClick() {
     this.emitterService.itemClick(this.index);
+  }
+
+  @HostListener('mouseover') mouseOver() {
+    this.isHovered = true;
+  }
+
+  @HostListener('mouseout') mouseOut() {
+    this.isHovered = false;
   }
 }

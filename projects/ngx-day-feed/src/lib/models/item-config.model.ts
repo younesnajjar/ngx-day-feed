@@ -4,4 +4,6 @@ export class ItemConfig {
   endHour?: number;
   endMinute?: number;
   backgroundColor?: string;
+  opacity?: number;
+  hoverOpacity?: number;
 }
