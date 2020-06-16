@@ -5,9 +5,10 @@ import {ItemConfig} from 'ngx-day-feed/models/item-config.model';
 
 export function setItemNeededValues(item: AvailabilityComponent, config: DayFeedConfig) {
   const itemConfig: ItemConfig = item.itemConfig;
-  const defaultConfigCopy: DayFeedConfig = JSON.parse(JSON.stringify(defaultConfig));
   itemConfig.startMinute = (itemConfig.startMinute) ? itemConfig.startMinute : 0;
   itemConfig.endMinute = (itemConfig.endMinute) ? itemConfig.endMinute : 0;
+  const defaultConfigCopy: DayFeedConfig = JSON.parse(JSON.stringify(defaultConfig));
+
   setConfigDefaults(config, defaultConfigCopy);
 
 

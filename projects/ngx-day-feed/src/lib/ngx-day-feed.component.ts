@@ -56,9 +56,9 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit, OnChanges 
   ngAfterContentInit(): void {
     const items: AvailabilityComponent[] = this.inputTabs.toArray();
     this.setTotalMinutes();
-    this.sortItems(items);
     setTimeout(() => {
       this.setBasicInfo(items);
+      this.sortItems(items);
       this.setHorizontalDimensions(items);
       this.setStandardWidth(items);
     });
@@ -66,10 +66,14 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit, OnChanges 
 
   sortItems(items) {
     items.sort((item1, item2) => {
-      if (item1.itemConfig.endHour - item2.itemConfig.endHour === 0) {
-        return item2.itemConfig.startHour - item1.itemConfig.startHour;
+      const startDiff: number = (item2.itemConfig.startHour - item1.itemConfig.startHour) * 60
+        + (item2.itemConfig.startMinute - item1.itemConfig.startMinute);
+      const endDiff: number = (item2.itemConfig.endHour - item1.itemConfig.endHour) * 60
+        + (item2.itemConfig.endMinute - item1.itemConfig.endMinute);
+      if (endDiff === 0) {
+        return startDiff;
       }
-      return item1.itemConfig.endHour - item2.itemConfig.endHour;
+      return endDiff;
     });
   }
 
