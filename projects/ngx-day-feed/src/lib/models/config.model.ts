@@ -5,9 +5,7 @@ export class DayFeedConfig {
       backgroundColor?: string,
       opacity?: number;
       hoverOpacity?: number,
-      animations?: {
-        hover?: boolean
-      }
+      disableHoverAnimation?: boolean,
     }
 
   };

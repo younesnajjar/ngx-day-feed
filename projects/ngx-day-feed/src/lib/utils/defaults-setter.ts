@@ -17,15 +17,12 @@ export function setItemNeededValues(item: AvailabilityComponent, config: DayFeed
   setConfigDisplayItems(item, config, 'backgroundColor');
   setConfigDisplayItems(item, config, 'opacity');
   setConfigDisplayItems(item, config, 'hoverOpacity');
-
-  // if(config.display.items.animations) {
-  //   item.itemConfig.disableHoverAnimation = config.display.items.animations;
-  // }
+  setConfigDisplayItems(item, config, 'disableHoverAnimation');
 }
 
 function setConfigDisplayItems(item: AvailabilityComponent, config: DayFeedConfig, attr: string) {
   const itemConfig: ItemConfig = item.itemConfig;
-  item.itemConfig[attr] = (itemConfig[attr])
+  item.itemConfig[attr] = (itemConfig[attr] || typeof itemConfig[attr] === 'boolean')
     ? itemConfig[attr]
     : (config.display.items[attr])
       ? config.display.items[attr]

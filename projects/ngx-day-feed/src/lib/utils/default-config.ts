@@ -8,7 +8,7 @@ export const defaultConfig: DayFeedConfig = {
     items: {
       backgroundColor: BACKGROUND,
       opacity: DEFAULT_OPACITY,
-      hoverOpacity: DEFAULT_HOVER_OPACITY
+      hoverOpacity: DEFAULT_HOVER_OPACITY,
     },
   },
   hours: {}

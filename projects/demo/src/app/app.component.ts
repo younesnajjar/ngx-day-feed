@@ -31,7 +31,8 @@ export class AppComponent {
     {
       startHour: 5,
       endHour: 7,
-      imgLink: 'https://avatars3.githubusercontent.com/u/37715926?s=400&u=19561cb03e388feebe6d6380b4c45095ef71fb62&v=4'
+      imgLink: 'https://avatars3.githubusercontent.com/u/37715926?s=400&u=19561cb03e388feebe6d6380b4c45095ef71fb62&v=4',
+      disableHoverAnimation: false
     },
     {
       startHour: 5,
@@ -78,7 +79,11 @@ export class AppComponent {
 
   ];
   config: DayFeedConfig = {
-
+    display: {
+      items: {
+        disableHoverAnimation: true
+      }
+    },
     hours: {
       callback: (value: string) => {
         return value.split(':').map((v, i) => (i === 1) ? v + 'min' : v + 'h').join(':');

@@ -7,7 +7,7 @@ import {ItemConfig} from 'ngx-day-feed/models/item-config.model';
   selector: 'ngx-availability',
   template: `
     <div [@Grow]="stateGrow" (click)="itemClick()"
-         class="one-availability-container hover-animation"
+         class="one-availability-container"
          [style.width]=""
          [style.left]=""
          [ngStyle]="{
@@ -17,6 +17,7 @@ import {ItemConfig} from 'ngx-day-feed/models/item-config.model';
             'width': ((100 - (dimensions.count - 1)  * gap ) / dimensions.count) + '%',
             'left': ((100 - (dimensions.count - 1) * gap) / dimensions.count) * (dimensions.position - 1)
                                                                                 + (dimensions.position - 1) * gap + '%'}"
+         [ngClass]="{'hover-animation': !itemConfig.disableHoverAnimation}"
     >
       <div class="availability-content"
            [ngStyle]="{
