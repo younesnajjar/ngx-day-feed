@@ -1,6 +1,7 @@
 export class DayFeedConfig {
   display?: {
-    gap?: number
+    gap?: number,
+    itemsBackGroundColor?: string,
   };
   animations?: {
     itemPop?: boolean

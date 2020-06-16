@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {EmitterService} from 'ngx-day-feed/services/emitter.service';
 import {growAnimation} from 'ngx-day-feed/animations/grow.animation';
+import {BACKGROUND} from 'ngx-day-feed/utils/consts';
 
 @Component({
   selector: 'ngx-availability',
@@ -16,7 +17,10 @@ import {growAnimation} from 'ngx-day-feed/animations/grow.animation';
             'left': ((100 - (dimensions.count - 1) * gap) / dimensions.count) * (dimensions.position - 1)
                                                                                 + (dimensions.position - 1) * gap + '%'}"
     >
-      <div class="availability-content">
+      <div class="availability-content"
+           [ngStyle]="{
+            'background': backgroundColor
+      }">
         <ng-content></ng-content>
       </div>
     </div>
@@ -34,6 +38,7 @@ export class AvailabilityComponent implements OnInit {
   @Input() dimensions: { top?: number, height?: number, count?: number, position?: number, span?: number };
   @Input() index: number;
   @Input() gap: number;
+  @Input() backgroundColor: string = BACKGROUND;
 
   private stateGrow: string;
 

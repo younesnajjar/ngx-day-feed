@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {DayFeedConfig} from 'ngx-day-feed';
+import {BACKGROUND} from 'ngx-day-feed/utils/consts';
 
 @Component({
   selector: 'app-root',
@@ -59,15 +60,7 @@ export class AppComponent {
         'k1-1.fna&oh=03e7d8b726bc5bfbf469b46ceefd0542&oe=5F0BF0CD'
     },
 
-    {
-      startHour: 17,
-      endHour: 19,
-      imgLink: 'https://scontent.frak1-1.fna.fbcdn.net/v/t1.0-9/74802279_25' +
-        '38828949683130_4929627466504339456_o.jpg?_nc_cat=105&_nc_sid=09cbfe&' +
-        '_nc_eui2=AeE_ajamA4T3ZcmKfwIw5lUk4i0MefoJL93iLQx5-gkv3VQob374s3AebFSs-4' +
-        'z4skB1Ip250bRGn-DUsA_CPIVw&_nc_ohc=05gvfvnI5xcAX8x04bm&_nc_ht=scontent.fra' +
-        'k1-1.fna&oh=03e7d8b726bc5bfbf469b46ceefd0542&oe=5F0BF0CD'
-    },
+
 
     {
       startHour: 14,
@@ -83,7 +76,8 @@ export class AppComponent {
   ];
   config: DayFeedConfig = {
     display: {
-      gap: 2
+      gap: 2,
+      itemsBackGroundColor: BACKGROUND
     },
     hours: {
       callback: (value: string) => {
