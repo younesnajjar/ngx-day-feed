@@ -1,15 +1,4 @@
-import {
-  AfterContentInit,
-  Component,
-  ContentChildren,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-  QueryList,
-  SimpleChanges
-} from '@angular/core';
+import {AfterContentInit, Component, ContentChildren, EventEmitter, Input, OnInit, Output, QueryList} from '@angular/core';
 import {AvailabilityComponent} from './availability/availability.component';
 import {EmitterService} from 'ngx-day-feed/services/emitter.service';
 import {DayFeedConfig} from 'ngx-day-feed/models/config.model';
@@ -35,7 +24,7 @@ import {ItemConfig} from 'ngx-day-feed/models/item-config.model';
   `,
   styleUrls: ['./ngx-day-feed.component.scss']
 })
-export class NgxDayFeedComponent implements OnInit, AfterContentInit, OnChanges {
+export class NgxDayFeedComponent implements OnInit, AfterContentInit {
   @ContentChildren(AvailabilityComponent) inputTabs: QueryList<AvailabilityComponent>;
 
   @Output() itemClick = new EventEmitter<{ index: number }>();
@@ -55,13 +44,25 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit, OnChanges 
 
   ngAfterContentInit(): void {
     const items: AvailabilityComponent[] = this.inputTabs.toArray();
+    this.inputTabs.changes.subscribe(() => {
+      this.change(this.inputTabs.toArray());
+    });
     this.setTotalMinutes();
+    this.change(items);
+
+  }
+
+  change(items: AvailabilityComponent[]) {
     setTimeout(() => {
       this.setBasicInfo(items);
       this.sortItems(items);
       this.setHorizontalDimensions(items);
       this.setStandardWidth(items);
     });
+  }
+
+  update() {
+    this.change(this.inputTabs.toArray());
   }
 
   sortItems(items) {
@@ -152,9 +153,6 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit, OnChanges 
     }
 
     return count;
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
   }
 
   private getPosition(items: AvailabilityComponent[]) {

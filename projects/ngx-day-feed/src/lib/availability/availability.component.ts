@@ -1,4 +1,4 @@
-import {Component, HostListener, Input, OnInit} from '@angular/core';
+import {Component, HostListener, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {EmitterService} from 'ngx-day-feed/services/emitter.service';
 import {growAnimation} from 'ngx-day-feed/animations/grow.animation';
 import {ItemConfig} from 'ngx-day-feed/models/item-config.model';
@@ -7,7 +7,7 @@ import {ItemConfig} from 'ngx-day-feed/models/item-config.model';
   selector: 'ngx-availability',
   template: `
     <div [@Grow]="!itemConfig.disableNewAnimation && stateGrow" (click)="itemClick()"
-         class="one-availability-container"
+         class="one-availability-container horizontal-animation"
          [style.width]=""
          [style.left]=""
          [ngStyle]="{
@@ -17,7 +17,8 @@ import {ItemConfig} from 'ngx-day-feed/models/item-config.model';
             'width': ((100 - (dimensions.count - 1)  * gap ) / dimensions.count) + '%',
             'left': ((100 - (dimensions.count - 1) * gap) / dimensions.count) * (dimensions.position - 1)
                                                                                 + (dimensions.position - 1) * gap + '%'}"
-         [ngClass]="{'hover-animation': !itemConfig.disableHoverAnimation}"
+         [ngClass]="{'hover-animation': !itemConfig.disableHoverAnimation,
+                       'full-animation': activateUpdateAnimation}"
     >
       <div class="availability-content"
            [ngStyle]="{
@@ -32,7 +33,7 @@ import {ItemConfig} from 'ngx-day-feed/models/item-config.model';
     growAnimation
   ]
 })
-export class AvailabilityComponent implements OnInit {
+export class AvailabilityComponent implements OnInit, OnChanges {
 
   @Input() itemConfig: ItemConfig;
   @Input() dimensions: { top?: number, height?: number, count?: number, position?: number, span?: number };
@@ -42,6 +43,7 @@ export class AvailabilityComponent implements OnInit {
 
   private stateGrow: string;
   public isHovered: boolean;
+  private activateUpdateAnimation: boolean;
 
   constructor(private emitterService: EmitterService) {
 
@@ -56,6 +58,11 @@ export class AvailabilityComponent implements OnInit {
     this.stateGrow = 'inactive';
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.itemConfig && changes.itemConfig.previousValue) {
+      this.activateUpdateAnimation = true;
+    }
+  }
 
   ngOnInit() {
     setTimeout(() => {

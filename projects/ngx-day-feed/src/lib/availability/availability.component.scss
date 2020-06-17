@@ -1,5 +1,13 @@
 $t-delay: 0.1s;
-$hover-transition-timing: width $t-delay, height $t-delay, margin-top $t-delay, margin-left $t-delay;
+$hover-transition-timing: all $t-delay;
+.horizontal-animation {
+  transition: width 0.5s, left 0.5s;
+}
+
+.full-animation {
+  transition: all 0.5s;
+}
+
 .one-availability-container {
   position: absolute;
   height: 100%;
