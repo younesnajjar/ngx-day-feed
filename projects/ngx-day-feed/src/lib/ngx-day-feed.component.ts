@@ -29,8 +29,8 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
 
   @Output() itemClick = new EventEmitter<{ index: number }>();
 
-  @Input() minHour = 8;
-  @Input() maxHour = 21;
+  minHour = 5;
+  maxHour = 21;
   @Input() config: DayFeedConfig;
 
   public hours: string[];
@@ -47,13 +47,33 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
     this.inputTabs.changes.subscribe(() => {
       this.change(this.inputTabs.toArray());
     });
-    this.setTotalMinutes();
     this.change(items);
 
   }
 
-  change(items: AvailabilityComponent[]) {
+  setLimits(items: AvailabilityComponent[]) {
+    let min = Infinity;
+    let max = -Infinity;
+    for (const item of items) {
+      if (item.itemConfig.startHour < min) {
+        min = item.itemConfig.startHour;
+      }
+      if (item.itemConfig.endHour > max) {
+        max = item.itemConfig.endHour;
+      }
+    }
+    console.log(min + ' - ' + max);
+    this.minHour = (this.config.hours.min) ? this.config.hours.min : min;
+    this.maxHour = (this.config.hours.max) ? this.config.hours.max + 1 : max + 1;
+    console.log(this.maxHour);
+  }
+
+  async change(items: AvailabilityComponent[]) {
+
     setTimeout(() => {
+      this.setLimits(items);
+      this.setTotalMinutes();
+      this.generateHours(this.minHour, this.maxHour, 60);
       this.setBasicInfo(items);
       this.sortItems(items);
       this.setHorizontalDimensions(items);
@@ -177,7 +197,6 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
   }
 
   ngOnInit() {
-    this.generateHours(this.minHour, this.maxHour, 60);
   }
 
   private generateHours(startHour: number, endHour: number, stepSizeMinutes: number) {

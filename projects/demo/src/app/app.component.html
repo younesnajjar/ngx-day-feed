@@ -1,6 +1,8 @@
-<div class="container">
+<div class="button-container">
   <button (click)="test()">Click me</button>
-  <ngx-day-feed (itemClick)="showMessage($event)" [config]="config" maxHour="20" minHour="5">
+</div>
+<div class="container" style="overflow-y: auto">
+  <ngx-day-feed (itemClick)="showMessage($event)" [config]="config">
 
     <ngx-availability *ngFor="let item of data; let i = index"
                       [itemConfig]="{

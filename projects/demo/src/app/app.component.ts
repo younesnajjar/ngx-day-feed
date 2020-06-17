@@ -12,7 +12,7 @@ export class AppComponent {
   public data: any[] = [
     {
       startHour: 11,
-      endHour: 19,
+      endHour: 20,
       imgLink: 'https://scontent.frak1-1.fna.fbcdn.net/v/t1.0-9/74802279_25' +
         '38828949683130_4929627466504339456_o.jpg?_nc_cat=105&_nc_sid=09cbfe&' +
         '_nc_eui2=AeE_ajamA4T3ZcmKfwIw5lUk4i0MefoJL93iLQx5-gkv3VQob374s3AebFSs-4' +
@@ -33,7 +33,6 @@ export class AppComponent {
       startHour: 6,
       startMinute: 30,
       endHour: 12,
-      endMinute: 15,
       imgLink: 'https://avatars3.githubusercontent.com/u/37715926?s=400&u=19561cb03e388feebe6d6380b4c45095ef71fb62&v=4',
       disableHoverAnimation: false
     },
@@ -146,6 +145,8 @@ export class AppComponent {
       }
     },
     hours: {
+      min: 5,
+      max: 23,
       callback: (value: string) => {
         return value.split(':').map((v, i) => (i === 1) ? v + 'min' : v + 'h').join(':');
       }
@@ -157,7 +158,7 @@ export class AppComponent {
   }
 
   test() {
-    this.data[2].endHour = Math.floor(Math.random() * (18 - 5)) + 7;
+    this.data[2].endHour = Math.floor(Math.random() * (3)) + 21;
     this.ngxDayFeedComponent.update();
   }
 }

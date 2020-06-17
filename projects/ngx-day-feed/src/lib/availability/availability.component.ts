@@ -41,9 +41,9 @@ export class AvailabilityComponent implements OnInit, OnChanges {
   @Input() gap: number;
 
 
-  private stateGrow: string;
+  public stateGrow: string;
   public isHovered: boolean;
-  private activateUpdateAnimation: boolean;
+  public activateUpdateAnimation: boolean;
 
   constructor(private emitterService: EmitterService) {
 
