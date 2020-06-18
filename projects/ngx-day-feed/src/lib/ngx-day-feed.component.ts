@@ -4,6 +4,7 @@ import {EmitterService} from 'ngx-day-feed/services/emitter.service';
 import {DayFeedConfig} from 'ngx-day-feed/models/config.model';
 import {setItemNeededValues} from 'ngx-day-feed/utils/defaults-setter';
 import {ItemConfig} from 'ngx-day-feed/models/item-config.model';
+import {ItemParallels} from 'ngx-day-feed/models/types';
 
 @Component({
   selector: 'ngx-day-feed',
@@ -122,21 +123,18 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
     items.forEach((item, index, mItems) => {
       const intersectedItems = this.getIntersectedItems(item, mItems);
       const notParallelCount = this.getNotInersectedCount(intersectedItems);
-      const count = intersectedItems.length - notParallelCount + 1;
-      const position = this.getPosition(intersectedItems);
-      item.dimensions.count = count;
-      item.dimensions.position = position;
+
+      item.dimensions.count = intersectedItems.length - notParallelCount + 1;
+      item.dimensions.position = this.getPosition(intersectedItems);
     });
 
   }
 
   setStandardWidth(items: AvailabilityComponent[]) {
-    const itemsParallels: { item: AvailabilityComponent, intersectedItems: AvailabilityComponent[] }[] = [];
+    const itemsParallels: ItemParallels[] = [];
     items.sort((item1, item2) => -item1.dimensions.position + item2.dimensions.position);
-    items.forEach((item, index) => {
-      item.sortIndex = index;
-    });
     items.forEach((item, index, mItems) => {
+      item.sortIndex = index;
       const intersectedItems = this.getIntersectedItems(item, mItems);
       const maxCount = this.getMaxCount([item, ...intersectedItems]);
       item.dimensions.width = ((100 - (maxCount - 1) * item.gap) / maxCount);
@@ -146,21 +144,22 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
       [item, ...intersectedItems].forEach((mItem) => {
         mItem.dimensions.count = maxCount;
       });
-      itemsParallels.push({item, intersectedItems});
+      // itemsParallels.push({item, intersectedItems});
+      item.intersectedItems = intersectedItems;
     });
 
-    itemsParallels.forEach((item) => {
-      const span = this.getSpan(item.item, item.intersectedItems);
+    items.forEach((item) => {
+      const span = this.getSpan(item, item.intersectedItems);
       if (span > 1) {
-        const array = this.getItemsToExpand(item.item, item.intersectedItems, itemsParallels);
+        const array = this.getItemsToExpand(item, items);
         console.log(array.map((it) => {
           return (it.map(itm => itm.index));
         }));
         array.reverse();
         const count = array.length + 1;
-        items[item.item.sortIndex].dimensions.preWidth = items[item.item.sortIndex].dimensions.width;
-        items[item.item.sortIndex].dimensions.width = this.getWidth(items[item.item.sortIndex], count, span);
-        items[item.item.sortIndex].dimensions.left = this.getLeft(items[item.item.sortIndex], count, span, array.length);
+        items[item.sortIndex].dimensions.preWidth = items[item.sortIndex].dimensions.width;
+        items[item.sortIndex].dimensions.width = this.getWidth(items[item.sortIndex], count, span);
+        items[item.sortIndex].dimensions.left = this.getLeft(items[item.sortIndex], count, span, array.length);
 
         for (let i = 0; i < array.length; i++) {
           for (const it of array[i]) {
@@ -203,19 +202,18 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
   }
 
   getItemsToExpand(item: AvailabilityComponent,
-                   itemParallels: AvailabilityComponent[],
-                   itemsParallels: { item: AvailabilityComponent, intersectedItems: AvailabilityComponent[] }[]) {
+                   items: AvailabilityComponent[]) {
 
     const parallelArrays = [];
     const blackList = [];
     for (let i = item.dimensions.position - 1; i >= 1; i--) {
-      const currentPositionItems = this.findItemsByPosition(itemParallels, i);
+      const currentPositionItems = this.findItemsByPosition(item.intersectedItems, i);
       if (currentPositionItems.length > 0) {
         const positionItems: AvailabilityComponent[] = [];
         for (const postionItem of currentPositionItems) {
-          const a = itemsParallels[postionItem.sortIndex].intersectedItems
+          const a = items[postionItem.sortIndex].intersectedItems
             .filter((mItem) => mItem.dimensions.position > postionItem.dimensions.position);
-          const b = itemParallels
+          const b = item.intersectedItems
             .filter((mItem) => mItem.dimensions.position > postionItem.dimensions.position);
           const counta = a.length;
           const countb = b.length + 1;

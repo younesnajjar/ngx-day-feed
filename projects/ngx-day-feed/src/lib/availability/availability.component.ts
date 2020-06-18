@@ -49,6 +49,7 @@ export class AvailabilityComponent implements OnInit, OnChanges {
   @Input() index: number;
   @Input() sortIndex: number;
   @Input() gap: number;
+  @Input() intersectedItems: AvailabilityComponent[];
 
 
   public stateGrow: string;
