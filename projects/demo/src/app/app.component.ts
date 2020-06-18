@@ -21,14 +21,16 @@ export class AppComponent {
       backgroundColor: 'orange'
     },
     {
-      startHour: 11,
+      startHour: 14,
       endHour: 19,
       imgLink: 'https://scontent.frak1-1.fna.fbcdn.net/v/t1.0-9/74802279_25' +
         '38828949683130_4929627466504339456_o.jpg?_nc_cat=105&_nc_sid=09cbfe&' +
         '_nc_eui2=AeE_ajamA4T3ZcmKfwIw5lUk4i0MefoJL93iLQx5-gkv3VQob374s3AebFSs-4' +
         'z4skB1Ip250bRGn-DUsA_CPIVw&_nc_ohc=05gvfvnI5xcAX8x04bm&_nc_ht=scontent.fra' +
         'k1-1.fna&oh=03e7d8b726bc5bfbf469b46ceefd0542&oe=5F0BF0CD',
+      backgroundColor: 'orange'
     },
+
     {
       startHour: 6,
       startMinute: 30,
@@ -42,8 +44,8 @@ export class AppComponent {
       imgLink: 'https://avatars3.githubusercontent.com/u/37715926?s=400&u=19561cb03e388feebe6d6380b4c45095ef71fb62&v=4'
     },
     {
-      startHour: 8,
-      endHour: 10,
+      startHour: 6,
+      endHour: 11,
       imgLink: 'https://avatars3.githubusercontent.com/u/37715926?s=400&u=19561cb03e388feebe6d6380b4c45095ef71fb62&v=4',
       backgroundColor: 'purple'
     }, {
@@ -124,17 +126,7 @@ export class AppComponent {
     },
 
 
-    {
-      startHour: 14,
-      endHour: 16,
-      imgLink: 'https://scontent.frak1-1.fna.fbcdn.net/v/t1.0-9/74802279_25' +
-        '38828949683130_4929627466504339456_o.jpg?_nc_cat=105&_nc_sid=09cbfe&' +
-        '_nc_eui2=AeE_ajamA4T3ZcmKfwIw5lUk4i0MefoJL93iLQx5-gkv3VQob374s3AebFSs-4' +
-        'z4skB1Ip250bRGn-DUsA_CPIVw&_nc_ohc=05gvfvnI5xcAX8x04bm&_nc_ht=scontent.fra' +
-        'k1-1.fna&oh=03e7d8b726bc5bfbf469b46ceefd0542&oe=5F0BF0CD',
-      opacity: 1,
-      hoverOpacity: 0.5,
-    },
+
 
 
   ];
@@ -145,8 +137,7 @@ export class AppComponent {
       }
     },
     hours: {
-      min: 5,
-      max: 23,
+
       callback: (value: string) => {
         return value.split(':').map((v, i) => (i === 1) ? v + 'min' : v + 'h').join(':');
       }
@@ -154,11 +145,12 @@ export class AppComponent {
   };
 
   showMessage($event: any) {
-    // this.data = this.data.filter((item, index) => index !== $event.index);
+    this.data = this.data.filter((item, index) => index !== $event.index);
   }
 
   test() {
-    this.data[2].endHour = Math.floor(Math.random() * (3)) + 21;
+    this.data[2].startHour = Math.floor(Math.random() * (11)) + 1;
+    this.data[2].endHour = Math.floor(Math.random() * (12)) + 12;
     this.ngxDayFeedComponent.update();
   }
 }

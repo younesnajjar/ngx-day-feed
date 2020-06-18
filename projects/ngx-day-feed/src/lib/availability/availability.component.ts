@@ -14,9 +14,8 @@ import {ItemConfig} from 'ngx-day-feed/models/item-config.model';
             'opacity': (isHovered) ? itemConfig.hoverOpacity : itemConfig.opacity,
             'height': dimensions.height + '%',
             'top': dimensions.top + '%',
-            'width': ((100 - (dimensions.count - 1)  * gap ) / dimensions.count) + '%',
-            'left': ((100 - (dimensions.count - 1) * gap) / dimensions.count) * (dimensions.position - 1)
-                                                                                + (dimensions.position - 1) * gap + '%'}"
+            'width': dimensions.width + '%',
+            'left': dimensions.left + '%'}"
          [ngClass]="{'hover-animation': !itemConfig.disableHoverAnimation,
                        'full-animation': activateUpdateAnimation}"
     >
@@ -24,7 +23,8 @@ import {ItemConfig} from 'ngx-day-feed/models/item-config.model';
            [ngStyle]="{
             'background': itemConfig.backgroundColor
       }">
-        <ng-content></ng-content>
+        <!--        <ng-content></ng-content>-->
+        <b style="color: white">{{index}}</b>
       </div>
     </div>
   `,
@@ -36,7 +36,16 @@ import {ItemConfig} from 'ngx-day-feed/models/item-config.model';
 export class AvailabilityComponent implements OnInit, OnChanges {
 
   @Input() itemConfig: ItemConfig;
-  @Input() dimensions: { top?: number, height?: number, count?: number, position?: number, span?: number };
+  @Input() dimensions: {
+    top?: number,
+    height?: number,
+    count?: number,
+    position?: number,
+    span?: number,
+    left?: number,
+    width?: number,
+    preWidth?: number
+  };
   @Input() index: number;
   @Input() gap: number;
 

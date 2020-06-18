@@ -25,16 +25,16 @@ import {ItemConfig} from 'ngx-day-feed/models/item-config.model';
   styleUrls: ['./ngx-day-feed.component.scss']
 })
 export class NgxDayFeedComponent implements OnInit, AfterContentInit {
+
   @ContentChildren(AvailabilityComponent) inputTabs: QueryList<AvailabilityComponent>;
 
-  @Output() itemClick = new EventEmitter<{ index: number }>();
-
-  minHour = 5;
-  maxHour = 21;
   @Input() config: DayFeedConfig;
 
+  @Output() itemClick = new EventEmitter<{ index: number }>();
   public hours: string[];
+  private minHour = 5;
   private totalMinutes: number;
+  private maxHour = 21;
 
 
   constructor(private emitterService: EmitterService) {
@@ -62,13 +62,11 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
         max = item.itemConfig.endHour;
       }
     }
-    console.log(min + ' - ' + max);
     this.minHour = (this.config.hours.min) ? this.config.hours.min : min;
     this.maxHour = (this.config.hours.max) ? this.config.hours.max + 1 : max + 1;
-    console.log(this.maxHour);
   }
 
-  async change(items: AvailabilityComponent[]) {
+  change(items: AvailabilityComponent[]) {
 
     setTimeout(() => {
       this.setLimits(items);
@@ -129,16 +127,120 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
       item.dimensions.count = count;
       item.dimensions.position = position;
     });
+
   }
 
   setStandardWidth(items: AvailabilityComponent[]) {
+    const itemsParallels: { item: AvailabilityComponent, intersectedItems: AvailabilityComponent[] }[] = [];
+    items.sort((item1, item2) => item1.index - item2.index);
     items.forEach((item, index, mItems) => {
       const intersectedItems = this.getIntersectedItems(item, mItems);
       const maxCount = this.getMaxCount([item, ...intersectedItems]);
+      item.dimensions.width = ((100 - (maxCount - 1) * item.gap) / maxCount);
+      item.dimensions.left = ((100 - (maxCount - 1) * item.gap) / maxCount) * (item.dimensions.position - 1)
+        + (item.dimensions.position - 1) * item.gap;
+
       [item, ...intersectedItems].forEach((mItem) => {
         mItem.dimensions.count = maxCount;
       });
+      itemsParallels.push({item, intersectedItems});
     });
+
+    itemsParallels.forEach((item) => {
+      // console.log(item.item.index);
+      // console.log(item.intersectedItems.map((it) => it.index));
+      // console.log('position: ' + item.item.dimensions.position);
+      // console.log('count: ' + item.item.dimensions.count);
+      const span = this.getSpan(item.item, item.intersectedItems);
+      if (span > 1) {
+        console.log('span: ' + span);
+        const array = this.getItemsToExpand(item.item, item.intersectedItems, itemsParallels);
+        array.reverse();
+        const count = array.length + 1;
+        items[item.item.index].dimensions.preWidth = items[item.item.index].dimensions.width;
+        items[item.item.index].dimensions.width = this.getWidth(item.item, count, span);
+        items[item.item.index].dimensions.left = this.getLeft(item.item, count, span, array.length);
+
+        for (let i = 0; i < array.length; i++) {
+          for (const it of array[i]) {
+            items[it.index].dimensions.preWidth = items[it.index].dimensions.width;
+            items[it.index].dimensions.width = this.getWidth(it, count, span);
+            items[it.index].dimensions.left = this.getLeft(it, count, span, i);
+          }
+        }
+      }
+    });
+  }
+
+  getWidth(item: AvailabilityComponent, count, span) {
+    return ((count + span - 1) * item.dimensions.width + (span - 1) * item.gap) / count;
+  }
+
+  getLeft(item: AvailabilityComponent, count, span, i: number) {
+    const left = item.dimensions.left;
+
+    return left + (count - (i + 1) + 1) * (item.dimensions.preWidth - item.dimensions.width)
+      + (span - 1) * (item.dimensions.preWidth + item.gap);
+  }
+
+  getSpan(item: AvailabilityComponent, itemParallels: AvailabilityComponent[]): number {
+    const positions = itemParallels.map((it) => it.dimensions.position);
+    // console.log(positions);
+    let span = 1;
+    for (let i = item.dimensions.position + 1; i <= item.dimensions.count; i++) {
+      if (!positions.includes(i)) {
+        span = span + 1;
+      } else {
+        return span;
+      }
+    }
+    return span;
+  }
+
+  getItemsToExpand(item: AvailabilityComponent,
+                   itemParallels: AvailabilityComponent[],
+                   itemsParallels: { item: AvailabilityComponent, intersectedItems: AvailabilityComponent[] }[]) {
+
+
+    const indexesAfterItem = itemParallels
+      .filter((mItem) => mItem.dimensions.position > item.dimensions.position).length;
+    console.log('item: ' + item.index);
+    console.log('count: ' + indexesAfterItem);
+    const parallelArrays = [];
+    for (let i = item.dimensions.position - 1; i >= 1; i--) {
+      const currentPositionItems = this.findItemsByPosition(itemParallels, i);
+      if (currentPositionItems.length > 0) {
+        const positionItems: AvailabilityComponent[] = [];
+        for (const postionItem of currentPositionItems) {
+          const count = itemsParallels[postionItem.index].intersectedItems
+            .filter((mItem) => mItem.dimensions.position > postionItem.dimensions.position).length;
+          const count1 = itemParallels
+            .filter((mItem) => mItem.dimensions.position > postionItem.dimensions.position).length + 1;
+          console.log('item ' + postionItem.index + ' : ' + count + ' - ' + count1);
+          if (count <= count1) {
+            console.log('index: ' + postionItem.index + ' / count: ' + count);
+            positionItems.push(postionItem);
+          }
+
+        }
+        if (positionItems.length > 0) {
+          parallelArrays.push(positionItems);
+        }
+
+      }
+    }
+    return parallelArrays;
+
+  }
+
+  findItemsByPosition(items: AvailabilityComponent[], position: number) {
+    const positionItems = [];
+    for (const item of items) {
+      if (item.dimensions.position === position) {
+        positionItems.push(item);
+      }
+    }
+    return positionItems;
   }
 
   getMaxCount(items: AvailabilityComponent[]) {
