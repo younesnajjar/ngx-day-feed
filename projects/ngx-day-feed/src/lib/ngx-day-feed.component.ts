@@ -132,7 +132,10 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
 
   setStandardWidth(items: AvailabilityComponent[]) {
     const itemsParallels: { item: AvailabilityComponent, intersectedItems: AvailabilityComponent[] }[] = [];
-    items.sort((item1, item2) => item1.index - item2.index);
+    items.sort((item1, item2) => -item1.dimensions.position + item2.dimensions.position);
+    items.forEach((item, index) => {
+      item.sortIndex = index;
+    });
     items.forEach((item, index, mItems) => {
       const intersectedItems = this.getIntersectedItems(item, mItems);
       const maxCount = this.getMaxCount([item, ...intersectedItems]);
@@ -150,17 +153,20 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
       const span = this.getSpan(item.item, item.intersectedItems);
       if (span > 1) {
         const array = this.getItemsToExpand(item.item, item.intersectedItems, itemsParallels);
+        console.log(array.map((it) => {
+          return (it.map(itm => itm.index));
+        }));
         array.reverse();
         const count = array.length + 1;
-        items[item.item.index].dimensions.preWidth = items[item.item.index].dimensions.width;
-        items[item.item.index].dimensions.width = this.getWidth(item.item, count, span);
-        items[item.item.index].dimensions.left = this.getLeft(item.item, count, span, array.length);
+        items[item.item.sortIndex].dimensions.preWidth = items[item.item.sortIndex].dimensions.width;
+        items[item.item.sortIndex].dimensions.width = this.getWidth(items[item.item.sortIndex], count, span);
+        items[item.item.sortIndex].dimensions.left = this.getLeft(items[item.item.sortIndex], count, span, array.length);
 
         for (let i = 0; i < array.length; i++) {
           for (const it of array[i]) {
-            items[it.index].dimensions.preWidth = items[it.index].dimensions.width;
-            items[it.index].dimensions.width = this.getWidth(it, count, span);
-            items[it.index].dimensions.left = this.getLeft(it, count, span, i);
+            items[it.sortIndex].dimensions.preWidth = items[it.sortIndex].dimensions.width;
+            items[it.sortIndex].dimensions.width = this.getWidth(it, count, span);
+            items[it.sortIndex].dimensions.left = this.getLeft(it, count, span, i);
           }
         }
       }
@@ -192,6 +198,10 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
     return span;
   }
 
+  getItemArrayIndexByItemIndex(items: AvailabilityComponent[], item: AvailabilityComponent) {
+    return items.findIndex((mItem) => mItem.index === item.index);
+  }
+
   getItemsToExpand(item: AvailabilityComponent,
                    itemParallels: AvailabilityComponent[],
                    itemsParallels: { item: AvailabilityComponent, intersectedItems: AvailabilityComponent[] }[]) {
@@ -203,7 +213,7 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
       if (currentPositionItems.length > 0) {
         const positionItems: AvailabilityComponent[] = [];
         for (const postionItem of currentPositionItems) {
-          const a = itemsParallels[postionItem.index].intersectedItems
+          const a = itemsParallels[postionItem.sortIndex].intersectedItems
             .filter((mItem) => mItem.dimensions.position > postionItem.dimensions.position);
           const b = itemParallels
             .filter((mItem) => mItem.dimensions.position > postionItem.dimensions.position);

@@ -47,6 +47,7 @@ export class AvailabilityComponent implements OnInit, OnChanges {
     preWidth?: number
   };
   @Input() index: number;
+  @Input() sortIndex: number;
   @Input() gap: number;
 
 

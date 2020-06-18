@@ -11,8 +11,8 @@ export class AppComponent {
   title = 'demo';
   public data: any[] = [
     {
-      startHour: 11,
-      endHour: 20,
+      startHour: 1,
+      endHour: 7,
       imgLink: 'https://scontent.frak1-1.fna.fbcdn.net/v/t1.0-9/74802279_25' +
         '38828949683130_4929627466504339456_o.jpg?_nc_cat=105&_nc_sid=09cbfe&' +
         '_nc_eui2=AeE_ajamA4T3ZcmKfwIw5lUk4i0MefoJL93iLQx5-gkv3VQob374s3AebFSs-4' +
@@ -21,8 +21,9 @@ export class AppComponent {
       backgroundColor: 'orange'
     },
     {
-      startHour: 14,
-      endHour: 19,
+      startHour: 3,
+      startMinute: 30,
+      endHour: 9,
       imgLink: 'https://scontent.frak1-1.fna.fbcdn.net/v/t1.0-9/74802279_25' +
         '38828949683130_4929627466504339456_o.jpg?_nc_cat=105&_nc_sid=09cbfe&' +
         '_nc_eui2=AeE_ajamA4T3ZcmKfwIw5lUk4i0MefoJL93iLQx5-gkv3VQob374s3AebFSs-4' +
@@ -33,14 +34,13 @@ export class AppComponent {
 
     {
       startHour: 6,
-      startMinute: 30,
-      endHour: 12,
+      endHour: 11,
       imgLink: 'https://avatars3.githubusercontent.com/u/37715926?s=400&u=19561cb03e388feebe6d6380b4c45095ef71fb62&v=4',
       disableHoverAnimation: false
     },
     {
-      startHour: 5,
-      endHour: 9,
+      startHour: 9,
+      endHour: 13,
       imgLink: 'https://avatars3.githubusercontent.com/u/37715926?s=400&u=19561cb03e388feebe6d6380b4c45095ef71fb62&v=4'
     },
     {
@@ -77,34 +77,42 @@ export class AppComponent {
         'k1-1.fna&oh=03e7d8b726bc5bfbf469b46ceefd0542&oe=5F0BF0CD',
       opacity: 1,
       hoverOpacity: 0.5,
-    },
-    {
-      startHour: 9,
-      startMinute: 30,
-      endHour: 10,
-      endMinute: 30,
+    }, {
+      startHour: 1,
+      endHour: 7,
       imgLink: 'https://scontent.frak1-1.fna.fbcdn.net/v/t1.0-9/74802279_25' +
         '38828949683130_4929627466504339456_o.jpg?_nc_cat=105&_nc_sid=09cbfe&' +
         '_nc_eui2=AeE_ajamA4T3ZcmKfwIw5lUk4i0MefoJL93iLQx5-gkv3VQob374s3AebFSs-4' +
         'z4skB1Ip250bRGn-DUsA_CPIVw&_nc_ohc=05gvfvnI5xcAX8x04bm&_nc_ht=scontent.fra' +
         'k1-1.fna&oh=03e7d8b726bc5bfbf469b46ceefd0542&oe=5F0BF0CD',
-      opacity: 1,
-      hoverOpacity: 0.5,
+      backgroundColor: 'orange'
     },
     {
+      startHour: 3,
+      startMinute: 30,
+      endHour: 9,
+      imgLink: 'https://scontent.frak1-1.fna.fbcdn.net/v/t1.0-9/74802279_25' +
+        '38828949683130_4929627466504339456_o.jpg?_nc_cat=105&_nc_sid=09cbfe&' +
+        '_nc_eui2=AeE_ajamA4T3ZcmKfwIw5lUk4i0MefoJL93iLQx5-gkv3VQob374s3AebFSs-4' +
+        'z4skB1Ip250bRGn-DUsA_CPIVw&_nc_ohc=05gvfvnI5xcAX8x04bm&_nc_ht=scontent.fra' +
+        'k1-1.fna&oh=03e7d8b726bc5bfbf469b46ceefd0542&oe=5F0BF0CD',
+      backgroundColor: 'orange'
+    },
+
+    {
       startHour: 6,
-      endHour: 7,
+      endHour: 11,
       imgLink: 'https://avatars3.githubusercontent.com/u/37715926?s=400&u=19561cb03e388feebe6d6380b4c45095ef71fb62&v=4',
       disableHoverAnimation: false
     },
     {
-      startHour: 5,
-      endHour: 7,
+      startHour: 9,
+      endHour: 13,
       imgLink: 'https://avatars3.githubusercontent.com/u/37715926?s=400&u=19561cb03e388feebe6d6380b4c45095ef71fb62&v=4'
     },
     {
-      startHour: 8,
-      endHour: 10,
+      startHour: 6,
+      endHour: 11,
       imgLink: 'https://avatars3.githubusercontent.com/u/37715926?s=400&u=19561cb03e388feebe6d6380b4c45095ef71fb62&v=4',
       backgroundColor: 'purple'
     }, {
@@ -126,7 +134,16 @@ export class AppComponent {
     },
 
 
-
+    {
+      startHour: 14,
+      endHour: 16,
+      imgLink: 'https://scontent.frak1-1.fna.fbcdn.net/v/t1.0-9/74802279_25' +
+        '38828949683130_4929627466504339456_o.jpg?_nc_cat=105&_nc_sid=09cbfe&' +
+        '_nc_eui2=AeE_ajamA4T3ZcmKfwIw5lUk4i0MefoJL93iLQx5-gkv3VQob374s3AebFSs-4' +
+        'z4skB1Ip250bRGn-DUsA_CPIVw&_nc_ohc=05gvfvnI5xcAX8x04bm&_nc_ht=scontent.fra' +
+        'k1-1.fna&oh=03e7d8b726bc5bfbf469b46ceefd0542&oe=5F0BF0CD',
+      hoverOpacity: 0.5,
+    }
 
 
   ];
@@ -134,6 +151,7 @@ export class AppComponent {
     display: {
       items: {
         disableHoverAnimation: true,
+        opacity: 0.6,
       }
     },
     hours: {
@@ -149,8 +167,10 @@ export class AppComponent {
   }
 
   test() {
-    this.data[10].startHour = Math.floor(Math.random() * (11)) + 1;
-    this.data[10].endHour = Math.floor(Math.random() * (12)) + 12;
+    this.data.forEach((item) => {
+      item.startHour = Math.floor(Math.random() * (11)) + 1;
+      item.endHour = Math.floor(Math.random() * (3)) + item.startHour + 4;
+    });
     this.ngxDayFeedComponent.update();
   }
 }
