@@ -147,13 +147,8 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
     });
 
     itemsParallels.forEach((item) => {
-      // console.log(item.item.index);
-      // console.log(item.intersectedItems.map((it) => it.index));
-      // console.log('position: ' + item.item.dimensions.position);
-      // console.log('count: ' + item.item.dimensions.count);
       const span = this.getSpan(item.item, item.intersectedItems);
       if (span > 1) {
-        console.log('span: ' + span);
         const array = this.getItemsToExpand(item.item, item.intersectedItems, itemsParallels);
         array.reverse();
         const count = array.length + 1;
@@ -201,26 +196,27 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
                    itemParallels: AvailabilityComponent[],
                    itemsParallels: { item: AvailabilityComponent, intersectedItems: AvailabilityComponent[] }[]) {
 
-
-    const indexesAfterItem = itemParallels
-      .filter((mItem) => mItem.dimensions.position > item.dimensions.position).length;
-    console.log('item: ' + item.index);
-    console.log('count: ' + indexesAfterItem);
     const parallelArrays = [];
+    const blackList = [];
     for (let i = item.dimensions.position - 1; i >= 1; i--) {
       const currentPositionItems = this.findItemsByPosition(itemParallels, i);
       if (currentPositionItems.length > 0) {
         const positionItems: AvailabilityComponent[] = [];
         for (const postionItem of currentPositionItems) {
-          const count = itemsParallels[postionItem.index].intersectedItems
-            .filter((mItem) => mItem.dimensions.position > postionItem.dimensions.position).length;
-          const count1 = itemParallels
-            .filter((mItem) => mItem.dimensions.position > postionItem.dimensions.position).length + 1;
-          console.log('item ' + postionItem.index + ' : ' + count + ' - ' + count1);
-          if (count <= count1) {
-            console.log('index: ' + postionItem.index + ' / count: ' + count);
-            positionItems.push(postionItem);
+          const a = itemsParallels[postionItem.index].intersectedItems
+            .filter((mItem) => mItem.dimensions.position > postionItem.dimensions.position);
+          const b = itemParallels
+            .filter((mItem) => mItem.dimensions.position > postionItem.dimensions.position);
+          const counta = a.length;
+          const countb = b.length + 1;
+          if (!this.hasParallel(blackList, postionItem)) {
+            if (counta <= countb) {
+              positionItems.push(postionItem);
+            } else {
+              blackList.push(postionItem);
+            }
           }
+
 
         }
         if (positionItems.length > 0) {
@@ -231,6 +227,13 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
     }
     return parallelArrays;
 
+  }
+
+  hasParallel(items: AvailabilityComponent[], item2: AvailabilityComponent) {
+    if (this.getIntersectedItems(item2, items).length > 0) {
+      return true;
+    }
+    return false;
   }
 
   findItemsByPosition(items: AvailabilityComponent[], position: number) {

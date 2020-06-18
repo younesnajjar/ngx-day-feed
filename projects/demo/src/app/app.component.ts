@@ -149,8 +149,8 @@ export class AppComponent {
   }
 
   test() {
-    this.data[2].startHour = Math.floor(Math.random() * (11)) + 1;
-    this.data[2].endHour = Math.floor(Math.random() * (12)) + 12;
+    this.data[10].startHour = Math.floor(Math.random() * (11)) + 1;
+    this.data[10].endHour = Math.floor(Math.random() * (12)) + 12;
     this.ngxDayFeedComponent.update();
   }
 }
