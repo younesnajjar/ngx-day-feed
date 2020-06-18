@@ -185,7 +185,6 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
 
   getSpan(item: AvailabilityComponent, itemParallels: AvailabilityComponent[]): number {
     const positions = itemParallels.map((it) => it.dimensions.position);
-    // console.log(positions);
     let span = 1;
     for (let i = item.dimensions.position + 1; i <= item.dimensions.count; i++) {
       if (!positions.includes(i)) {
@@ -195,10 +194,6 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
       }
     }
     return span;
-  }
-
-  getItemArrayIndexByItemIndex(items: AvailabilityComponent[], item: AvailabilityComponent) {
-    return items.findIndex((mItem) => mItem.index === item.index);
   }
 
   getItemsToExpand(item: AvailabilityComponent,
