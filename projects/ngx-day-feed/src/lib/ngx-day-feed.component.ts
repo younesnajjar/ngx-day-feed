@@ -54,12 +54,14 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
   setLimits(items: AvailabilityComponent[]) {
     let min = Infinity;
     let max = -Infinity;
-    for (const item of items) {
-      if (item.itemConfig.startHour < min) {
-        min = item.itemConfig.startHour;
-      }
-      if (item.itemConfig.endHour > max) {
-        max = item.itemConfig.endHour;
+    if (!this.config.hours.min || !this.config.hours.max) {
+      for (const item of items) {
+        if (item.itemConfig.startHour < min) {
+          min = item.itemConfig.startHour;
+        }
+        if (item.itemConfig.endHour > max) {
+          max = item.itemConfig.endHour;
+        }
       }
     }
     this.minHour = (this.config.hours.min) ? this.config.hours.min : min;
@@ -83,12 +85,10 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
     this.change(this.inputTabs.toArray());
   }
 
-  sortItems(items) {
+  sortItems(items: AvailabilityComponent[]) {
     items.sort((item1, item2) => {
-      const startDiff: number = (item2.itemConfig.startHour - item1.itemConfig.startHour) * 60
-        + (item2.itemConfig.startMinute - item1.itemConfig.startMinute);
-      const endDiff: number = (item2.itemConfig.endHour - item1.itemConfig.endHour) * 60
-        + (item2.itemConfig.endMinute - item1.itemConfig.endMinute);
+      const startDiff: number = item2.dimensions.top - item1.dimensions.top;
+      const endDiff: number = (item2.dimensions.top + item2.dimensions.height) - (item1.dimensions.top + item1.dimensions.height);
       if (endDiff === 0) {
         return startDiff;
       }
