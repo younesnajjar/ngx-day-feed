@@ -1,6 +1,6 @@
-import {AvailabilityComponent} from 'ngx-day-feed/availability/availability.component';
+import {CalendarItemComponent} from 'ngx-day-feed/calendar-item/calendar-item.component';
 
 export interface ItemParallels {
-  item: AvailabilityComponent;
-  intersectedItems: AvailabilityComponent[];
+  item: CalendarItemComponent;
+  intersectedItems: CalendarItemComponent[];
 }

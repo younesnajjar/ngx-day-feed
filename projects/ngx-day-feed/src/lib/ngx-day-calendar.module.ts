@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
-import {NgxDayFeedComponent} from './ngx-day-feed.component';
+import {NgxDayCalendarComponent} from './ngx-day-calendar.component';
 import {CommonModule} from '@angular/common';
-import {AvailabilityComponent} from './availability/availability.component';
+import {CalendarItemComponent} from './calendar-item/calendar-item.component';
 import {EmitterService} from 'ngx-day-feed/services/emitter.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {BrowserModule} from '@angular/platform-browser';
@@ -9,14 +9,14 @@ import {VarDirective} from 'ngx-day-feed/directives/var.directive';
 
 
 @NgModule({
-  declarations: [NgxDayFeedComponent, AvailabilityComponent, VarDirective],
+  declarations: [NgxDayCalendarComponent, CalendarItemComponent, VarDirective],
   imports: [
     CommonModule,
     BrowserModule,
     BrowserAnimationsModule
   ],
-  exports: [NgxDayFeedComponent, AvailabilityComponent],
+  exports: [NgxDayCalendarComponent, CalendarItemComponent],
   providers: [EmitterService]
 })
-export class NgxDayFeedModule {
+export class NgxDayCalendarModule {
 }

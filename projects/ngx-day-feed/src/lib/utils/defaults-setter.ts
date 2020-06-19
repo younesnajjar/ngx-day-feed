@@ -1,9 +1,9 @@
-import {AvailabilityComponent} from 'ngx-day-feed/availability/availability.component';
+import {CalendarItemComponent} from 'ngx-day-feed/calendar-item/calendar-item.component';
 import {DayFeedConfig} from 'ngx-day-feed/models';
 import {defaultConfig} from 'ngx-day-feed/utils/default-config';
 import {ItemConfig} from 'ngx-day-feed/models/item-config.model';
 
-export function setItemNeededValues(item: AvailabilityComponent, config: DayFeedConfig) {
+export function setItemNeededValues(item: CalendarItemComponent, config: DayFeedConfig) {
   const itemConfig: ItemConfig = item.itemConfig;
   itemConfig.startMinute = (itemConfig.startMinute) ? itemConfig.startMinute : 0;
   itemConfig.endMinute = (itemConfig.endMinute) ? itemConfig.endMinute : 0;
@@ -22,7 +22,7 @@ export function setItemNeededValues(item: AvailabilityComponent, config: DayFeed
   setConfigDisplayItems(item, config, 'disableNewAnimation');
 }
 
-function setConfigDisplayItems(item: AvailabilityComponent, config: DayFeedConfig, attr: string) {
+function setConfigDisplayItems(item: CalendarItemComponent, config: DayFeedConfig, attr: string) {
   const itemConfig: ItemConfig = item.itemConfig;
   item.itemConfig[attr] = (itemConfig[attr] || typeof itemConfig[attr] === 'boolean')
     ? itemConfig[attr]

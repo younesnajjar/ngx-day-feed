@@ -4,7 +4,7 @@ import {growAnimation} from 'ngx-day-feed/animations/grow.animation';
 import {ItemConfig} from 'ngx-day-feed/models/item-config.model';
 
 @Component({
-  selector: 'ngx-availability',
+  selector: 'ngx-calendar-item',
   template: `
     <div [@Grow]="!itemConfig.disableNewAnimation && stateGrow" (click)="itemClick()"
          class="one-availability-container horizontal-animation"
@@ -23,17 +23,16 @@ import {ItemConfig} from 'ngx-day-feed/models/item-config.model';
            [ngStyle]="{
             'background': itemConfig.backgroundColor
       }">
-        <!--        <ng-content></ng-content>-->
-        <b style="color: white">{{index}}</b>
+        <ng-content></ng-content>
       </div>
     </div>
   `,
-  styleUrls: ['./availability.component.scss'],
+  styleUrls: ['./calendar-item.component.scss'],
   animations: [
     growAnimation
   ]
 })
-export class AvailabilityComponent implements OnInit, OnChanges {
+export class CalendarItemComponent implements OnInit, OnChanges {
 
   @Input() itemConfig: ItemConfig;
   @Input() dimensions: {
@@ -49,7 +48,7 @@ export class AvailabilityComponent implements OnInit, OnChanges {
   @Input() index: number;
   @Input() sortIndex: number;
   @Input() gap: number;
-  @Input() intersectedItems: AvailabilityComponent[];
+  @Input() intersectedItems: CalendarItemComponent[];
 
 
   public stateGrow: string;

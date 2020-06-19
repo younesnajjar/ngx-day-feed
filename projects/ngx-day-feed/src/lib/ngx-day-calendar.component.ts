@@ -1,5 +1,5 @@
 import {AfterContentInit, Component, ContentChildren, EventEmitter, Input, OnInit, Output, QueryList} from '@angular/core';
-import {AvailabilityComponent} from './availability/availability.component';
+import {CalendarItemComponent} from './calendar-item/calendar-item.component';
 import {EmitterService} from 'ngx-day-feed/services/emitter.service';
 import {DayFeedConfig} from 'ngx-day-feed/models/config.model';
 import {setItemNeededValues} from 'ngx-day-feed/utils/defaults-setter';
@@ -23,11 +23,11 @@ import {ItemParallels} from 'ngx-day-feed/models/types';
     </div>
 
   `,
-  styleUrls: ['./ngx-day-feed.component.scss']
+  styleUrls: ['./ngx-day-calendar.component.scss']
 })
-export class NgxDayFeedComponent implements OnInit, AfterContentInit {
+export class NgxDayCalendarComponent implements OnInit, AfterContentInit {
 
-  @ContentChildren(AvailabilityComponent) inputTabs: QueryList<AvailabilityComponent>;
+  @ContentChildren(CalendarItemComponent) inputTabs: QueryList<CalendarItemComponent>;
 
   @Input() config: DayFeedConfig;
 
@@ -44,7 +44,7 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
 
 
   ngAfterContentInit(): void {
-    const items: AvailabilityComponent[] = this.inputTabs.toArray();
+    const items: CalendarItemComponent[] = this.inputTabs.toArray();
     this.inputTabs.changes.subscribe(() => {
       this.change(this.inputTabs.toArray());
     });
@@ -52,7 +52,7 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
 
   }
 
-  setLimits(items: AvailabilityComponent[]) {
+  setLimits(items: CalendarItemComponent[]) {
     let min = Infinity;
     let max = -Infinity;
     if (!this.config.hours.min || !this.config.hours.max) {
@@ -69,7 +69,7 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
     this.maxHour = (this.config.hours.max) ? this.config.hours.max + 1 : max + 1;
   }
 
-  change(items: AvailabilityComponent[]) {
+  change(items: CalendarItemComponent[]) {
 
     setTimeout(() => {
       this.setLimits(items);
@@ -86,7 +86,7 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
     this.change(this.inputTabs.toArray());
   }
 
-  sortItems(items: AvailabilityComponent[]) {
+  sortItems(items: CalendarItemComponent[]) {
     items.sort((item1, item2) => {
       const startDiff: number = item2.dimensions.top - item1.dimensions.top;
       const endDiff: number = (item2.dimensions.top + item2.dimensions.height) - (item1.dimensions.top + item1.dimensions.height);
@@ -101,7 +101,7 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
     this.totalMinutes = (this.maxHour - this.minHour) * 60;
   }
 
-  setBasicInfo(items: AvailabilityComponent[]) {
+  setBasicInfo(items: CalendarItemComponent[]) {
     // Setting the availability Index
     // Setting Vertical Dimensions 'height' && 'top'
 
@@ -117,7 +117,7 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
     });
   }
 
-  setHorizontalDimensions(items: AvailabilityComponent[]) {
+  setHorizontalDimensions(items: CalendarItemComponent[]) {
     // Setting Horizontal Dimensions 'width related to count' && 'left related to position'
 
     items.forEach((item, index, mItems) => {
@@ -130,7 +130,7 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
 
   }
 
-  setStandardWidth(items: AvailabilityComponent[]) {
+  setStandardWidth(items: CalendarItemComponent[]) {
     const itemsParallels: ItemParallels[] = [];
     items.sort((item1, item2) => -item1.dimensions.position + item2.dimensions.position);
     items.forEach((item, index, mItems) => {
@@ -152,9 +152,6 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
       const span = this.getSpan(item, item.intersectedItems);
       if (span > 1) {
         const array = this.getItemsToExpand(item, items);
-        console.log(array.map((it) => {
-          return (it.map(itm => itm.index));
-        }));
         array.reverse();
         const count = array.length + 1;
         items[item.sortIndex].dimensions.preWidth = items[item.sortIndex].dimensions.width;
@@ -172,18 +169,18 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
     });
   }
 
-  getWidth(item: AvailabilityComponent, count, span) {
+  getWidth(item: CalendarItemComponent, count, span) {
     return ((count + span - 1) * item.dimensions.width + (span - 1) * item.gap) / count;
   }
 
-  getLeft(item: AvailabilityComponent, count, span, i: number) {
+  getLeft(item: CalendarItemComponent, count, span, i: number) {
     const left = item.dimensions.left;
 
     return left + (count - (i + 1) + 1) * (item.dimensions.preWidth - item.dimensions.width)
       + (span - 1) * (item.dimensions.preWidth + item.gap);
   }
 
-  getSpan(item: AvailabilityComponent, itemParallels: AvailabilityComponent[]): number {
+  getSpan(item: CalendarItemComponent, itemParallels: CalendarItemComponent[]): number {
     const positions = itemParallels.map((it) => it.dimensions.position);
     let span = 1;
     for (let i = item.dimensions.position + 1; i <= item.dimensions.count; i++) {
@@ -196,15 +193,15 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
     return span;
   }
 
-  getItemsToExpand(item: AvailabilityComponent,
-                   items: AvailabilityComponent[]) {
+  getItemsToExpand(item: CalendarItemComponent,
+                   items: CalendarItemComponent[]) {
 
     const parallelArrays = [];
     const blackList = [];
     for (let i = item.dimensions.position - 1; i >= 1; i--) {
       const currentPositionItems = this.findItemsByPosition(item.intersectedItems, i);
       if (currentPositionItems.length > 0) {
-        const positionItems: AvailabilityComponent[] = [];
+        const positionItems: CalendarItemComponent[] = [];
         for (const postionItem of currentPositionItems) {
           const a = items[postionItem.sortIndex].intersectedItems
             .filter((mItem) => mItem.dimensions.position > postionItem.dimensions.position);
@@ -232,14 +229,14 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
 
   }
 
-  hasParallel(items: AvailabilityComponent[], item2: AvailabilityComponent) {
+  hasParallel(items: CalendarItemComponent[], item2: CalendarItemComponent) {
     if (this.getIntersectedItems(item2, items).length > 0) {
       return true;
     }
     return false;
   }
 
-  findItemsByPosition(items: AvailabilityComponent[], position: number) {
+  findItemsByPosition(items: CalendarItemComponent[], position: number) {
     const positionItems = [];
     for (const item of items) {
       if (item.dimensions.position === position) {
@@ -249,7 +246,7 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
     return positionItems;
   }
 
-  getMaxCount(items: AvailabilityComponent[]) {
+  getMaxCount(items: CalendarItemComponent[]) {
     let max = 0;
     for (const item of items) {
       if (item.dimensions.count > max) {
@@ -259,14 +256,14 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
     return max;
   }
 
-  getIntersectedItems(currentItem: AvailabilityComponent, items: AvailabilityComponent[]): AvailabilityComponent[] {
+  getIntersectedItems(currentItem: CalendarItemComponent, items: CalendarItemComponent[]): CalendarItemComponent[] {
     return items.filter((item) => {
       return currentItem.index !== item.index && item.dimensions.top < currentItem.dimensions.top + currentItem.dimensions.height
         && item.dimensions.top + item.dimensions.height > currentItem.dimensions.top;
     });
   }
 
-  getNotInersectedCount(items: AvailabilityComponent[]): number {
+  getNotInersectedCount(items: CalendarItemComponent[]): number {
     let count = 0;
     const forbiddenListIndexes: number[] = [];
     for (let i = 0; i < items.length; i++) {
@@ -283,7 +280,7 @@ export class NgxDayFeedComponent implements OnInit, AfterContentInit {
     return count;
   }
 
-  private getPosition(items: AvailabilityComponent[]) {
+  private getPosition(items: CalendarItemComponent[]) {
     let position = 1;
     let positions = items.filter((item) => item.dimensions.position)
       .map((item) => item.dimensions.position)

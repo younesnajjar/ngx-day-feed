@@ -4,8 +4,8 @@
 <div class="container" style="overflow-y: auto">
   <ngx-day-feed (itemClick)="showMessage($event)" [config]="config">
 
-    <ngx-availability *ngFor="let item of data; let i = index"
-                      [itemConfig]="{
+    <ngx-calendar-item *ngFor="let item of data; let i = index"
+                       [itemConfig]="{
                       startHour: item.startHour,
                       endHour: item.endHour,
                       startMinute: item.startMinute,
@@ -16,7 +16,7 @@
                       disableNewAnimation: item.disableNewAnimation
                       }">
       <img [src]="item.imgLink" alt="profile image"/>
-    </ngx-availability>
+    </ngx-calendar-item>
 
   </ngx-day-feed>
 </div>

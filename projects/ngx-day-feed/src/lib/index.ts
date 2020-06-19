@@ -1,4 +1,4 @@
-export * from './ngx-day-feed.component';
-export * from './ngx-day-feed.module';
-export * from './availability/availability.component';
+export * from './ngx-day-calendar.component';
+export * from './ngx-day-calendar.module';
+export * from './calendar-item/calendar-item.component';
 export * from './models';
