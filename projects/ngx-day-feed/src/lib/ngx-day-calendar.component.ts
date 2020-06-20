@@ -205,21 +205,20 @@ export class NgxDayCalendarComponent implements OnInit, AfterContentInit {
       const currentPositionItems = this.findItemsByPosition(item.horizontalIntersectedItems, currentPosition);
       if (currentPositionItems.length > 0) {
         const positionItems: CalendarItemComponent[] = [];
-        const itemIntervalHorizontalItems = item.horizontalIntersectedItems
-          .filter(
-            (mItem) =>
-              mItem.dimensions.position > currentPosition && mItem.dimensions.position <= item.dimensions.position + span
-          );
+        const itemIntervalHorizontalItems =
+          this.getIntervalItems(item.horizontalIntersectedItems, currentPosition + 1, item.dimensions.position + span);
         for (const positionItem of currentPositionItems) {
-          const positionItemIntervalHorizontalItems = items[positionItem.sortIndex].horizontalIntersectedItems
-            .filter(
-              (mItem) =>
-                mItem.dimensions.position > currentPosition && mItem.dimensions.position <= item.dimensions.position + span)
-          ;
-          const counta = positionItemIntervalHorizontalItems.length;
-          const countb = itemIntervalHorizontalItems.length + 1;
+
+          const positionItemIntervalHorizontalItems =
+            this.getIntervalItems(
+              items[positionItem.sortIndex].horizontalIntersectedItems,
+              currentPosition + 1,
+              item.dimensions.position + span);
+
+          const positionIntervalHorizontalItemsCount = positionItemIntervalHorizontalItems.length;
+          const itemIntervalHorizontalItemsCount = itemIntervalHorizontalItems.length + 1;
           if (!this.hasParallel(blackList, positionItem)) {
-            if (counta <= countb) {
+            if (positionIntervalHorizontalItemsCount <= itemIntervalHorizontalItemsCount) {
               positionItems.push(positionItem);
             } else {
               blackList.push(positionItem);
@@ -227,8 +226,6 @@ export class NgxDayCalendarComponent implements OnInit, AfterContentInit {
           } else {
             blackList.push(positionItem);
           }
-
-
         }
         if (positionItems.length > 0) {
           parallelArrays.push(positionItems);
@@ -242,11 +239,17 @@ export class NgxDayCalendarComponent implements OnInit, AfterContentInit {
 
   }
 
+  getIntervalItems(items: CalendarItemComponent[], firstPosition, lastPosition) {
+    return items
+      .filter(
+        (item) =>
+          item.dimensions.position >= firstPosition && item.dimensions.position <= lastPosition
+      );
+  }
+
   hasParallel(items: CalendarItemComponent[], item2: CalendarItemComponent) {
-    if (this.getHorizontalIntersectedItems(item2, items).length > 0) {
-      return true;
-    }
-    return false;
+    return this.getHorizontalIntersectedItems(item2, items).length > 0;
+
   }
 
   findItemsByPosition(items: CalendarItemComponent[], position: number) {
