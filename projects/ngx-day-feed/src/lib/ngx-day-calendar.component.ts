@@ -78,12 +78,18 @@ export class NgxDayCalendarComponent implements OnInit, AfterContentInit {
       this.setBasicInfo(items);
       this.sortItems(items);
       this.setHorizontalDimensions(items);
+      this.sortByPosition(items);
       this.setStandardWidth(items);
+      this.setFlexedWidth(items);
     });
   }
 
   update() {
     this.change(this.inputTabs.toArray());
+  }
+
+  sortByPosition(items: CalendarItemComponent[]) {
+    items.sort((item1, item2) => item2.dimensions.position - item1.dimensions.position);
   }
 
   sortItems(items: CalendarItemComponent[]) {
@@ -122,32 +128,33 @@ export class NgxDayCalendarComponent implements OnInit, AfterContentInit {
 
     items.forEach((item, index, mItems) => {
       const horizontalIntersectedItems = this.getHorizontalIntersectedItems(item, mItems);
-      item.intersectedItems = horizontalIntersectedItems;
       const verticalLinksCount = this.getVerticalLinksCount(horizontalIntersectedItems);
 
+      item.horizontalIntersectedItems = horizontalIntersectedItems;
       item.dimensions.count = horizontalIntersectedItems.length - verticalLinksCount + 1;
       item.dimensions.position = this.getFirstAvailablePosition(horizontalIntersectedItems);
     });
   }
 
   setStandardWidth(items: CalendarItemComponent[]) {
-    items.sort((item1, item2) => item2.dimensions.position - item1.dimensions.position);
     items.forEach((item, index) => {
       item.sortIndex = index;
-      const maxCount = this.getMaxCount([item, ...item.intersectedItems]);
+      const maxCount = this.getMaxCount([item, ...item.horizontalIntersectedItems]);
       item.dimensions.width = ((100 - (maxCount - 1) * item.gap) / maxCount);
       item.dimensions.left = ((100 - (maxCount - 1) * item.gap) / maxCount) * (item.dimensions.position - 1)
         + (item.dimensions.position - 1) * item.gap;
 
-      [item, ...item.intersectedItems].forEach((mItem) => {
+      [item, ...item.horizontalIntersectedItems].forEach((mItem) => {
         mItem.dimensions.count = maxCount;
       });
     });
+  }
 
+  setFlexedWidth(items: CalendarItemComponent[]) {
     items.forEach((item) => {
-      const span = this.getSpan(item, item.intersectedItems);
+      const span = this.getSpan(item, item.horizontalIntersectedItems);
       if (span > 1) {
-        const itemsToExpand = this.getItemsToExpand(item, items);
+        const itemsToExpand = this.getItemsToExpand(item, items, span);
         const count = itemsToExpand.length + 1;
         items[item.sortIndex].dimensions.preWidth = items[item.sortIndex].dimensions.width;
         items[item.sortIndex].dimensions.width = this.getWidth(items[item.sortIndex], count, span);
@@ -188,35 +195,45 @@ export class NgxDayCalendarComponent implements OnInit, AfterContentInit {
     return span;
   }
 
-  getItemsToExpand(item: CalendarItemComponent,
-                   items: CalendarItemComponent[]) {
+  getItemsToExpand(item: CalendarItemComponent, items: CalendarItemComponent[], span: number) {
 
     const parallelArrays = [];
     const blackList = [];
-    for (let i = item.dimensions.position - 1; i >= 1; i--) {
+    for (let currentPosition = item.dimensions.position - 1; currentPosition >= 1; currentPosition--) {
       // Horizontal Intersected Items that comes before the the candidate item (position < current)
-      const currentPositionItems = this.findItemsByPosition(item.intersectedItems, i);
+      // Interval(X: CalendarItemComponent): between X.position AND item.position
+      const currentPositionItems = this.findItemsByPosition(item.horizontalIntersectedItems, currentPosition);
       if (currentPositionItems.length > 0) {
         const positionItems: CalendarItemComponent[] = [];
+        const itemIntervalHorizontalItems = item.horizontalIntersectedItems
+          .filter(
+            (mItem) =>
+              mItem.dimensions.position > currentPosition && mItem.dimensions.position <= item.dimensions.position + span
+          );
         for (const positionItem of currentPositionItems) {
-          const a = items[positionItem.sortIndex].intersectedItems
-            .filter((mItem) => mItem.dimensions.position > positionItem.dimensions.position);
-          const b = item.intersectedItems
-            .filter((mItem) => mItem.dimensions.position > positionItem.dimensions.position);
-          const counta = a.length;
-          const countb = b.length + 1;
+          const positionItemIntervalHorizontalItems = items[positionItem.sortIndex].horizontalIntersectedItems
+            .filter(
+              (mItem) =>
+                mItem.dimensions.position > currentPosition && mItem.dimensions.position <= item.dimensions.position + span)
+          ;
+          const counta = positionItemIntervalHorizontalItems.length;
+          const countb = itemIntervalHorizontalItems.length + 1;
           if (!this.hasParallel(blackList, positionItem)) {
             if (counta <= countb) {
               positionItems.push(positionItem);
             } else {
               blackList.push(positionItem);
             }
+          } else {
+            blackList.push(positionItem);
           }
 
 
         }
         if (positionItems.length > 0) {
           parallelArrays.push(positionItems);
+        } else {
+          break;
         }
 
       }
@@ -233,7 +250,7 @@ export class NgxDayCalendarComponent implements OnInit, AfterContentInit {
   }
 
   findItemsByPosition(items: CalendarItemComponent[], position: number) {
-    // Finding
+    // Finding Intersected items by position
     const positionItems = [];
     for (const item of items) {
       if (item.dimensions.position === position) {

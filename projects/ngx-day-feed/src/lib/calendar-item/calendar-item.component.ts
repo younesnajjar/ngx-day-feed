@@ -48,7 +48,7 @@ export class CalendarItemComponent implements OnInit, OnChanges {
   @Input() index: number;
   @Input() sortIndex: number;
   @Input() gap: number;
-  @Input() intersectedItems: CalendarItemComponent[];
+  @Input() horizontalIntersectedItems: CalendarItemComponent[];
 
 
   public stateGrow: string;
