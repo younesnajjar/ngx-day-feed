@@ -232,7 +232,6 @@ export class NgxDayCalendarComponent implements OnInit, AfterContentInit {
         } else {
           break;
         }
-
       }
     }
     return parallelArrays.reverse();
