@@ -3,7 +3,7 @@ import {NgModule} from '@angular/core';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {NgxDayCalendarModule} from 'ngx-day-feed';
+import {NgxDayFeedModule} from 'ngx-day-feed';
 
 @NgModule({
   declarations: [
@@ -12,7 +12,7 @@ import {NgxDayCalendarModule} from 'ngx-day-feed';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NgxDayCalendarModule
+    NgxDayFeedModule
   ],
   providers: [],
   bootstrap: [AppComponent]

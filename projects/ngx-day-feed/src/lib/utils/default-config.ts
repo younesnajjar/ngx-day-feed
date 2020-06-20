@@ -1,6 +1,6 @@
-import {DayFeedConfig} from 'ngx-day-feed/models';
-import {BACKGROUND, DEFAULT_HOVER_OPACITY, DEFAULT_OPACITY} from 'ngx-day-feed/utils/consts';
-import {ItemConfig} from 'ngx-day-feed/models/item-config.model';
+import {DayFeedConfig} from '../models';
+import {BACKGROUND, DEFAULT_HOVER_OPACITY, DEFAULT_OPACITY} from './consts';
+import {ItemConfig} from '../models/item-config.model';
 
 export const defaultConfig: DayFeedConfig = {
   display: {

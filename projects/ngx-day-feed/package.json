@@ -6,6 +6,5 @@
     "@angular/core": "^8.2.14"
   },
   "dependencies": {
-    "@angular/cdk": "^9.2.4"
   }
 }

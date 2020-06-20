@@ -1,7 +1,7 @@
 import {Component, HostListener, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {EmitterService} from 'ngx-day-feed/services/emitter.service';
-import {growAnimation} from 'ngx-day-feed/animations/grow.animation';
-import {ItemConfig} from 'ngx-day-feed/models/item-config.model';
+import {EmitterService} from '../services/emitter.service';
+import {growAnimation} from '../animations/grow.animation';
+import {ItemConfig} from '../models/item-config.model';
 
 @Component({
   selector: 'ngx-calendar-item',
@@ -27,12 +27,12 @@ import {ItemConfig} from 'ngx-day-feed/models/item-config.model';
       </div>
     </div>
   `,
-  styleUrls: ['./calendar-item.component.scss'],
+  styleUrls: ['./feed-item.component.scss'],
   animations: [
     growAnimation
   ]
 })
-export class CalendarItemComponent implements OnInit, OnChanges {
+export class FeedItemComponent implements OnInit, OnChanges {
 
   @Input() itemConfig: ItemConfig;
   @Input() dimensions: {
@@ -48,7 +48,7 @@ export class CalendarItemComponent implements OnInit, OnChanges {
   @Input() index: number;
   @Input() sortIndex: number;
   @Input() gap: number;
-  @Input() horizontalIntersectedItems: CalendarItemComponent[];
+  @Input() horizontalIntersectedItems: FeedItemComponent[];
 
 
   public stateGrow: string;

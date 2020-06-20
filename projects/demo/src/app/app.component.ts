@@ -1,5 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
-import {DayFeedConfig, NgxDayCalendarComponent} from 'ngx-day-feed';
+import {DayFeedConfig, NgxDayFeedComponent} from 'ngx-day-feed';
 
 @Component({
   selector: 'app-root',
@@ -7,12 +7,12 @@ import {DayFeedConfig, NgxDayCalendarComponent} from 'ngx-day-feed';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  @ViewChild(NgxDayCalendarComponent, null) ngxDayFeedComponent: NgxDayCalendarComponent;
+  @ViewChild(NgxDayFeedComponent, null) ngxDayFeedComponent: NgxDayFeedComponent;
   title = 'demo';
   public data: any[] = [
     {
       startHour: 1,
-      endHour: 5,
+      endHour: 3,
       imgLink: 'https://scontent.frak1-1.fna.fbcdn.net/v/t1.0-9/74802279_25' +
         '38828949683130_4929627466504339456_o.jpg?_nc_cat=105&_nc_sid=09cbfe&' +
         '_nc_eui2=AeE_ajamA4T3ZcmKfwIw5lUk4i0MefoJL93iLQx5-gkv3VQob374s3AebFSs-4' +
@@ -21,8 +21,8 @@ export class AppComponent {
       backgroundColor: 'orange'
     },
     {
-      startHour: 2,
-      endHour: 8,
+      startHour: 3,
+      endHour: 7,
       imgLink: 'https://scontent.frak1-1.fna.fbcdn.net/v/t1.0-9/74802279_25' +
         '38828949683130_4929627466504339456_o.jpg?_nc_cat=105&_nc_sid=09cbfe&' +
         '_nc_eui2=AeE_ajamA4T3ZcmKfwIw5lUk4i0MefoJL93iLQx5-gkv3VQob374s3AebFSs-4' +
@@ -32,33 +32,34 @@ export class AppComponent {
     },
 
     {
-      startHour: 5,
-      endHour: 11,
+      startHour: 3,
+      startMinute: 30,
+      endHour: 6,
       imgLink: 'https://avatars3.githubusercontent.com/u/37715926?s=400&u=19561cb03e388feebe6d6380b4c45095ef71fb62&v=4',
       disableHoverAnimation: false
     },
     {
-      startHour: 7,
+      startHour: 6,
       endHour: 15,
       imgLink: 'https://avatars3.githubusercontent.com/u/37715926?s=400&u=19561cb03e388feebe6d6380b4c45095ef71fb62&v=4'
     },
     {
       startHour: 7,
-      endHour: 14,
+      endHour: 17,
       imgLink: 'https://avatars3.githubusercontent.com/u/37715926?s=400&u=19561cb03e388feebe6d6380b4c45095ef71fb62&v=4',
       backgroundColor: 'purple'
     }, {
-      startHour: 7,
-      startMinute: 30,
-      endHour: 16,
+      startHour: 10,
+      endHour: 19,
       imgLink: 'https://scontent.frak1-1.fna.fbcdn.net/v/t1.0-9/74802279_2538828949683130_492962' +
         '7466504339456_o.jpg?_nc_cat=105&_nc_sid=09cbfe&_nc_eui2=AeE_ajamA4T' +
         '3ZcmKfwIw5lUk4i0MefoJL93iLQx5-gkv3VQob374s3AebFSs-4z4skB1Ip250bRGn-DU' +
         'sA_CPIVw&_nc_ohc=05gvfvnI5xcAX8x04bm&_nc_ht=scontent.frak1-1.fna&oh=03e7d8b7' +
         '26bc5bfbf469b46ceefd0542&oe=5F0BF0CD'
     }, {
-      startHour: 9,
-      endHour: 13,
+      startHour: 11,
+      startMinute: 30,
+      endHour: 20,
       imgLink: 'https://scontent.frak1-1.fna.fbcdn.net/v/t1.0-9/74802279_25' +
         '38828949683130_4929627466504339456_o.jpg?_nc_cat=105&_nc_sid=09cbfe&' +
         '_nc_eui2=AeE_ajamA4T3ZcmKfwIw5lUk4i0MefoJL93iLQx5-gkv3VQob374s3AebFSs-4' +
@@ -68,9 +69,8 @@ export class AppComponent {
 
 
     {
-      startHour: 9,
-      startMinute: 30,
-      endHour: 13,
+      startHour: 11,
+      endHour: 22,
       imgLink: 'https://scontent.frak1-1.fna.fbcdn.net/v/t1.0-9/74802279_25' +
         '38828949683130_4929627466504339456_o.jpg?_nc_cat=105&_nc_sid=09cbfe&' +
         '_nc_eui2=AeE_ajamA4T3ZcmKfwIw5lUk4i0MefoJL93iLQx5-gkv3VQob374s3AebFSs-4' +

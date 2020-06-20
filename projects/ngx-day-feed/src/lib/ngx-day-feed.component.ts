@@ -1,10 +1,10 @@
 import {AfterContentInit, Component, ContentChildren, EventEmitter, Input, OnInit, Output, QueryList} from '@angular/core';
-import {CalendarItemComponent} from './calendar-item/calendar-item.component';
-import {EmitterService} from 'ngx-day-feed/services/emitter.service';
-import {DayFeedConfig} from 'ngx-day-feed/models/config.model';
-import {setItemNeededValues} from 'ngx-day-feed/utils/defaults-setter';
-import {ItemConfig} from 'ngx-day-feed/models/item-config.model';
-import {generateHours} from 'ngx-day-feed/utils/setters';
+import {FeedItemComponent} from './feed-item/feed-item.component';
+import {EmitterService} from './services/emitter.service';
+import {DayFeedConfig} from './models';
+import {setItemNeededValues} from './utils/defaults-setter';
+import {ItemConfig} from './models/item-config.model';
+import {generateHours} from './utils/setters';
 
 @Component({
   selector: 'ngx-day-feed',
@@ -23,11 +23,11 @@ import {generateHours} from 'ngx-day-feed/utils/setters';
     </div>
 
   `,
-  styleUrls: ['./ngx-day-calendar.component.scss']
+  styleUrls: ['./ngx-day-feed.component.scss']
 })
-export class NgxDayCalendarComponent implements OnInit, AfterContentInit {
+export class NgxDayFeedComponent implements OnInit, AfterContentInit {
 
-  @ContentChildren(CalendarItemComponent) inputTabs: QueryList<CalendarItemComponent>;
+  @ContentChildren(FeedItemComponent) inputTabs: QueryList<FeedItemComponent>;
 
   @Input() config: DayFeedConfig;
 
@@ -44,7 +44,7 @@ export class NgxDayCalendarComponent implements OnInit, AfterContentInit {
 
 
   ngAfterContentInit(): void {
-    const items: CalendarItemComponent[] = this.inputTabs.toArray();
+    const items: FeedItemComponent[] = this.inputTabs.toArray();
     this.inputTabs.changes.subscribe(() => {
       this.change(this.inputTabs.toArray());
     });
@@ -52,10 +52,10 @@ export class NgxDayCalendarComponent implements OnInit, AfterContentInit {
 
   }
 
-  setLimits(items: CalendarItemComponent[]) {
+  setLimits(items: FeedItemComponent[]) {
     let min = Infinity;
     let max = -Infinity;
-    if (!this.config.hours.min || !this.config.hours.max) {
+    if (!this.config || !this.config.hours || !this.config.hours.min || !this.config.hours.max) {
       for (const item of items) {
         if (item.itemConfig.startHour < min) {
           min = item.itemConfig.startHour;
@@ -65,11 +65,11 @@ export class NgxDayCalendarComponent implements OnInit, AfterContentInit {
         }
       }
     }
-    this.minHour = (this.config.hours.min) ? this.config.hours.min : min;
-    this.maxHour = (this.config.hours.max) ? this.config.hours.max + 1 : max + 1;
+    this.minHour = (this.config && this.config.hours.min) ? this.config.hours.min : min;
+    this.maxHour = (this.config && this.config.hours.max) ? this.config.hours.max + 1 : max + 1;
   }
 
-  change(items: CalendarItemComponent[]) {
+  change(items: FeedItemComponent[]) {
 
     setTimeout(() => {
       this.setLimits(items);
@@ -88,11 +88,11 @@ export class NgxDayCalendarComponent implements OnInit, AfterContentInit {
     this.change(this.inputTabs.toArray());
   }
 
-  sortByPosition(items: CalendarItemComponent[]) {
+  sortByPosition(items: FeedItemComponent[]) {
     items.sort((item1, item2) => item2.dimensions.position - item1.dimensions.position);
   }
 
-  sortItems(items: CalendarItemComponent[]) {
+  sortItems(items: FeedItemComponent[]) {
     items.sort((item1, item2) => {
       const startDiff: number = item2.dimensions.top - item1.dimensions.top;
       const endDiff: number = (item2.dimensions.top + item2.dimensions.height) - (item1.dimensions.top + item1.dimensions.height);
@@ -107,7 +107,7 @@ export class NgxDayCalendarComponent implements OnInit, AfterContentInit {
     this.totalMinutes = (this.maxHour - this.minHour) * 60;
   }
 
-  setBasicInfo(items: CalendarItemComponent[]) {
+  setBasicInfo(items: FeedItemComponent[]) {
     // Setting the availability Index
     // Setting Vertical Dimensions 'height' && 'top'
 
@@ -123,7 +123,7 @@ export class NgxDayCalendarComponent implements OnInit, AfterContentInit {
     });
   }
 
-  setHorizontalDimensions(items: CalendarItemComponent[]) {
+  setHorizontalDimensions(items: FeedItemComponent[]) {
     // Setting Horizontal Dimensions 'width related to count' && 'left related to position'
 
     items.forEach((item, index, mItems) => {
@@ -136,7 +136,7 @@ export class NgxDayCalendarComponent implements OnInit, AfterContentInit {
     });
   }
 
-  setStandardWidth(items: CalendarItemComponent[]) {
+  setStandardWidth(items: FeedItemComponent[]) {
     items.forEach((item, index) => {
       item.sortIndex = index;
       const maxCount = this.getMaxCount([item, ...item.horizontalIntersectedItems]);
@@ -150,7 +150,7 @@ export class NgxDayCalendarComponent implements OnInit, AfterContentInit {
     });
   }
 
-  setFlexedWidth(items: CalendarItemComponent[]) {
+  setFlexedWidth(items: FeedItemComponent[]) {
     items.forEach((item) => {
       const span = this.getSpan(item, item.horizontalIntersectedItems);
       if (span > 1) {
@@ -171,18 +171,18 @@ export class NgxDayCalendarComponent implements OnInit, AfterContentInit {
     });
   }
 
-  getWidth(item: CalendarItemComponent, count, span) {
+  getWidth(item: FeedItemComponent, count, span) {
     return ((count + span - 1) * item.dimensions.width + (span - 1) * item.gap) / count;
   }
 
-  getLeft(item: CalendarItemComponent, count, span, i: number) {
+  getLeft(item: FeedItemComponent, count, span, i: number) {
     const left = item.dimensions.left;
 
     return left + (count - (i + 1) + 1) * (item.dimensions.preWidth - item.dimensions.width)
       + (span - 1) * (item.dimensions.preWidth + item.gap);
   }
 
-  getSpan(item: CalendarItemComponent, itemParallels: CalendarItemComponent[]): number {
+  getSpan(item: FeedItemComponent, itemParallels: FeedItemComponent[]): number {
     const positions = itemParallels.map((it) => it.dimensions.position);
     let span = 1;
     for (let i = item.dimensions.position + 1; i <= item.dimensions.count; i++) {
@@ -195,16 +195,16 @@ export class NgxDayCalendarComponent implements OnInit, AfterContentInit {
     return span;
   }
 
-  getItemsToExpand(item: CalendarItemComponent, items: CalendarItemComponent[], span: number) {
+  getItemsToExpand(item: FeedItemComponent, items: FeedItemComponent[], span: number) {
 
     const parallelArrays = [];
     const blackList = [];
     for (let currentPosition = item.dimensions.position - 1; currentPosition >= 1; currentPosition--) {
       // Horizontal Intersected Items that comes before the the candidate item (position < current)
-      // Interval(X: CalendarItemComponent): between X.position AND item.position
+      // Interval(X: FeedItemComponent): between X.position AND item.position
       const currentPositionItems = this.findItemsByPosition(item.horizontalIntersectedItems, currentPosition);
       if (currentPositionItems.length > 0) {
-        const positionItems: CalendarItemComponent[] = [];
+        const positionItems: FeedItemComponent[] = [];
         const itemIntervalHorizontalItems =
           this.getIntervalItems(item.horizontalIntersectedItems, currentPosition + 1, item.dimensions.position + span);
         for (const positionItem of currentPositionItems) {
@@ -238,7 +238,7 @@ export class NgxDayCalendarComponent implements OnInit, AfterContentInit {
 
   }
 
-  getIntervalItems(items: CalendarItemComponent[], firstPosition, lastPosition) {
+  getIntervalItems(items: FeedItemComponent[], firstPosition, lastPosition) {
     return items
       .filter(
         (item) =>
@@ -246,12 +246,12 @@ export class NgxDayCalendarComponent implements OnInit, AfterContentInit {
       );
   }
 
-  hasParallel(items: CalendarItemComponent[], item2: CalendarItemComponent) {
+  hasParallel(items: FeedItemComponent[], item2: FeedItemComponent) {
     return this.getHorizontalIntersectedItems(item2, items).length > 0;
 
   }
 
-  findItemsByPosition(items: CalendarItemComponent[], position: number) {
+  findItemsByPosition(items: FeedItemComponent[], position: number) {
     // Finding Intersected items by position
     const positionItems = [];
     for (const item of items) {
@@ -262,7 +262,7 @@ export class NgxDayCalendarComponent implements OnInit, AfterContentInit {
     return positionItems;
   }
 
-  getMaxCount(items: CalendarItemComponent[]) {
+  getMaxCount(items: FeedItemComponent[]) {
     let max = 0;
     for (const item of items) {
       if (item.dimensions.count > max) {
@@ -272,14 +272,14 @@ export class NgxDayCalendarComponent implements OnInit, AfterContentInit {
     return max;
   }
 
-  getHorizontalIntersectedItems(currentItem: CalendarItemComponent, items: CalendarItemComponent[]): CalendarItemComponent[] {
+  getHorizontalIntersectedItems(currentItem: FeedItemComponent, items: FeedItemComponent[]): FeedItemComponent[] {
     return items.filter((item) => {
       return currentItem.index !== item.index && item.dimensions.top < currentItem.dimensions.top + currentItem.dimensions.height
         && item.dimensions.top + item.dimensions.height > currentItem.dimensions.top;
     });
   }
 
-  getVerticalLinksCount(items: CalendarItemComponent[]): number {
+  getVerticalLinksCount(items: FeedItemComponent[]): number {
     // Get the number of vertically aligned items Links (Ex: 1 <-> 2 <-> 5 <-> 6, 3 <-> 4 links: 4)
 
     let count = 0;
@@ -298,7 +298,21 @@ export class NgxDayCalendarComponent implements OnInit, AfterContentInit {
     return count;
   }
 
-  private getFirstAvailablePosition(items: CalendarItemComponent[]) {
+  hourFormatter(hour: string) {
+    return (this.config && this.config.hours && this.config.hours.callback) ? this.config.hours.callback(hour) : hour;
+  }
+
+  ngOnInit() {
+  }
+
+
+  setItemClickEvent() {
+    this.emitterService.itemClick$.subscribe((i) => {
+      this.itemClick.emit({index: i});
+    });
+  }
+
+  private getFirstAvailablePosition(items: FeedItemComponent[]) {
     let firstAvailablePosition = 1;
     let alreadyUsedPositions = items.filter((item) => item.dimensions.position)
       .map((item) => item.dimensions.position)
@@ -312,21 +326,6 @@ export class NgxDayCalendarComponent implements OnInit, AfterContentInit {
       }
     }
     return firstAvailablePosition;
-  }
-
-  ngOnInit() {
-  }
-
-
-  setItemClickEvent() {
-    this.emitterService.itemClick$.subscribe((i) => {
-      this.itemClick.emit({index: i});
-    });
-  }
-
-  hourFormatter(hour: string) {
-    const {hours} = this.config;
-    return (hours.callback) ? hours.callback(hour) : hour;
   }
 
 
