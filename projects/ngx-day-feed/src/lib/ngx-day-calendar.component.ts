@@ -4,7 +4,7 @@ import {EmitterService} from 'ngx-day-feed/services/emitter.service';
 import {DayFeedConfig} from 'ngx-day-feed/models/config.model';
 import {setItemNeededValues} from 'ngx-day-feed/utils/defaults-setter';
 import {ItemConfig} from 'ngx-day-feed/models/item-config.model';
-import {ItemParallels} from 'ngx-day-feed/models/types';
+import {generateHours} from 'ngx-day-feed/utils/setters';
 
 @Component({
   selector: 'ngx-day-feed',
@@ -74,7 +74,7 @@ export class NgxDayCalendarComponent implements OnInit, AfterContentInit {
     setTimeout(() => {
       this.setLimits(items);
       this.setTotalMinutes();
-      this.generateHours(this.minHour, this.maxHour, 60);
+      this.hours = generateHours(this.minHour, this.maxHour, 60);
       this.setBasicInfo(items);
       this.sortItems(items);
       this.setHorizontalDimensions(items);
@@ -121,45 +121,40 @@ export class NgxDayCalendarComponent implements OnInit, AfterContentInit {
     // Setting Horizontal Dimensions 'width related to count' && 'left related to position'
 
     items.forEach((item, index, mItems) => {
-      const intersectedItems = this.getIntersectedItems(item, mItems);
-      const notParallelCount = this.getNotInersectedCount(intersectedItems);
+      const horizontalIntersectedItems = this.getHorizontalIntersectedItems(item, mItems);
+      item.intersectedItems = horizontalIntersectedItems;
+      const verticalLinksCount = this.getVerticalLinksCount(horizontalIntersectedItems);
 
-      item.dimensions.count = intersectedItems.length - notParallelCount + 1;
-      item.dimensions.position = this.getPosition(intersectedItems);
+      item.dimensions.count = horizontalIntersectedItems.length - verticalLinksCount + 1;
+      item.dimensions.position = this.getFirstAvailablePosition(horizontalIntersectedItems);
     });
-
   }
 
   setStandardWidth(items: CalendarItemComponent[]) {
-    const itemsParallels: ItemParallels[] = [];
-    items.sort((item1, item2) => -item1.dimensions.position + item2.dimensions.position);
-    items.forEach((item, index, mItems) => {
+    items.sort((item1, item2) => item2.dimensions.position - item1.dimensions.position);
+    items.forEach((item, index) => {
       item.sortIndex = index;
-      const intersectedItems = this.getIntersectedItems(item, mItems);
-      const maxCount = this.getMaxCount([item, ...intersectedItems]);
+      const maxCount = this.getMaxCount([item, ...item.intersectedItems]);
       item.dimensions.width = ((100 - (maxCount - 1) * item.gap) / maxCount);
       item.dimensions.left = ((100 - (maxCount - 1) * item.gap) / maxCount) * (item.dimensions.position - 1)
         + (item.dimensions.position - 1) * item.gap;
 
-      [item, ...intersectedItems].forEach((mItem) => {
+      [item, ...item.intersectedItems].forEach((mItem) => {
         mItem.dimensions.count = maxCount;
       });
-      // itemsParallels.push({item, intersectedItems});
-      item.intersectedItems = intersectedItems;
     });
 
     items.forEach((item) => {
       const span = this.getSpan(item, item.intersectedItems);
       if (span > 1) {
-        const array = this.getItemsToExpand(item, items);
-        array.reverse();
-        const count = array.length + 1;
+        const itemsToExpand = this.getItemsToExpand(item, items);
+        const count = itemsToExpand.length + 1;
         items[item.sortIndex].dimensions.preWidth = items[item.sortIndex].dimensions.width;
         items[item.sortIndex].dimensions.width = this.getWidth(items[item.sortIndex], count, span);
-        items[item.sortIndex].dimensions.left = this.getLeft(items[item.sortIndex], count, span, array.length);
+        items[item.sortIndex].dimensions.left = this.getLeft(items[item.sortIndex], count, span, itemsToExpand.length);
 
-        for (let i = 0; i < array.length; i++) {
-          for (const it of array[i]) {
+        for (let i = 0; i < itemsToExpand.length; i++) {
+          for (const it of itemsToExpand[i]) {
             items[it.sortIndex].dimensions.preWidth = items[it.sortIndex].dimensions.width;
             items[it.sortIndex].dimensions.width = this.getWidth(it, count, span);
             items[it.sortIndex].dimensions.left = this.getLeft(it, count, span, i);
@@ -199,21 +194,22 @@ export class NgxDayCalendarComponent implements OnInit, AfterContentInit {
     const parallelArrays = [];
     const blackList = [];
     for (let i = item.dimensions.position - 1; i >= 1; i--) {
+      // Horizontal Intersected Items that comes before the the candidate item (position < current)
       const currentPositionItems = this.findItemsByPosition(item.intersectedItems, i);
       if (currentPositionItems.length > 0) {
         const positionItems: CalendarItemComponent[] = [];
-        for (const postionItem of currentPositionItems) {
-          const a = items[postionItem.sortIndex].intersectedItems
-            .filter((mItem) => mItem.dimensions.position > postionItem.dimensions.position);
+        for (const positionItem of currentPositionItems) {
+          const a = items[positionItem.sortIndex].intersectedItems
+            .filter((mItem) => mItem.dimensions.position > positionItem.dimensions.position);
           const b = item.intersectedItems
-            .filter((mItem) => mItem.dimensions.position > postionItem.dimensions.position);
+            .filter((mItem) => mItem.dimensions.position > positionItem.dimensions.position);
           const counta = a.length;
           const countb = b.length + 1;
-          if (!this.hasParallel(blackList, postionItem)) {
+          if (!this.hasParallel(blackList, positionItem)) {
             if (counta <= countb) {
-              positionItems.push(postionItem);
+              positionItems.push(positionItem);
             } else {
-              blackList.push(postionItem);
+              blackList.push(positionItem);
             }
           }
 
@@ -225,18 +221,19 @@ export class NgxDayCalendarComponent implements OnInit, AfterContentInit {
 
       }
     }
-    return parallelArrays;
+    return parallelArrays.reverse();
 
   }
 
   hasParallel(items: CalendarItemComponent[], item2: CalendarItemComponent) {
-    if (this.getIntersectedItems(item2, items).length > 0) {
+    if (this.getHorizontalIntersectedItems(item2, items).length > 0) {
       return true;
     }
     return false;
   }
 
   findItemsByPosition(items: CalendarItemComponent[], position: number) {
+    // Finding
     const positionItems = [];
     for (const item of items) {
       if (item.dimensions.position === position) {
@@ -256,14 +253,16 @@ export class NgxDayCalendarComponent implements OnInit, AfterContentInit {
     return max;
   }
 
-  getIntersectedItems(currentItem: CalendarItemComponent, items: CalendarItemComponent[]): CalendarItemComponent[] {
+  getHorizontalIntersectedItems(currentItem: CalendarItemComponent, items: CalendarItemComponent[]): CalendarItemComponent[] {
     return items.filter((item) => {
       return currentItem.index !== item.index && item.dimensions.top < currentItem.dimensions.top + currentItem.dimensions.height
         && item.dimensions.top + item.dimensions.height > currentItem.dimensions.top;
     });
   }
 
-  getNotInersectedCount(items: CalendarItemComponent[]): number {
+  getVerticalLinksCount(items: CalendarItemComponent[]): number {
+    // Get the number of vertically aligned items Links (Ex: 1 <-> 2 <-> 5 <-> 6, 3 <-> 4 links: 4)
+
     let count = 0;
     const forbiddenListIndexes: number[] = [];
     for (let i = 0; i < items.length; i++) {
@@ -280,39 +279,25 @@ export class NgxDayCalendarComponent implements OnInit, AfterContentInit {
     return count;
   }
 
-  private getPosition(items: CalendarItemComponent[]) {
-    let position = 1;
-    let positions = items.filter((item) => item.dimensions.position)
+  private getFirstAvailablePosition(items: CalendarItemComponent[]) {
+    let firstAvailablePosition = 1;
+    let alreadyUsedPositions = items.filter((item) => item.dimensions.position)
       .map((item) => item.dimensions.position)
       .sort((position1, position2) => position1 - position2);
-    positions = positions.filter((arrayPosition, i) => positions.indexOf(arrayPosition) === i);
-    for (const arrayPosition of positions) {
-      if (arrayPosition) {
-        if (position === arrayPosition) {
-          position++;
-        } else {
-          break;
-        }
+    alreadyUsedPositions = alreadyUsedPositions.filter((position, i) => alreadyUsedPositions.indexOf(position) === i);
+    for (const usedPosition of alreadyUsedPositions) {
+      if (firstAvailablePosition === usedPosition) {
+        firstAvailablePosition++;
+      } else {
+        break;
       }
     }
-    if (items.length > 0 && position === items[items.length - 1].dimensions.position) {
-      return position + 1;
-    }
-    return position;
+    return firstAvailablePosition;
   }
 
   ngOnInit() {
   }
 
-  private generateHours(startHour: number, endHour: number, stepSizeMinutes: number) {
-    const hours: string[] = [];
-    let i = startHour * 60;
-    while (i < endHour * 60) {
-      hours.push(('0' + Math.floor(i / 60)).slice(-2) + ':' + ('0' + (i % 60)).slice(-2));
-      i = i + stepSizeMinutes;
-    }
-    this.hours = hours;
-  }
 
   setItemClickEvent() {
     this.emitterService.itemClick$.subscribe((i) => {
