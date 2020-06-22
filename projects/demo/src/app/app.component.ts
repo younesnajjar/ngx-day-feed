@@ -10,14 +10,7 @@ import {ItemConfig} from 'ngx-day-feed/models/item-config.model';
 export class AppComponent implements OnInit {
   @ViewChild(NgxDayFeedComponent, null) ngxDayFeedComponent: NgxDayFeedComponent;
   title = 'demo';
-  images: string[] = [
-    'https://scontent.frak1-1.fna.fbcdn.net/v/t1.0-9/74802279_25' +
-    '38828949683130_4929627466504339456_o.jpg?_nc_cat=105&_nc_sid=09cbfe&' +
-    '_nc_eui2=AeE_ajamA4T3ZcmKfwIw5lUk4i0MefoJL93iLQx5-gkv3VQob374s3AebFSs-4' +
-    'z4skB1Ip250bRGn-DUsA_CPIVw&_nc_ohc=05gvfvnI5xcAX8x04bm&_nc_ht=scontent.fra' +
-    'k1-1.fna&oh=03e7d8b726bc5bfbf469b46ceefd0542&oe=5F0BF0CD',
-    'https://avatars3.githubusercontent.com/u/37715926?s=400&u=19561cb03e388feebe6d6380b4c45095ef71fb62&v=4',
-  ];
+  imagesSourceLink = 'https://raw.githubusercontent.com/younesnajjar/ngx-day-feed/master/projects/demo/src/assets/profiles/avatar-';
   colors: string[] = ['orange', 'purple', '#FFA0A0', 'grey', null, null];
   imagesArray: string[] = [];
   public data: ItemConfig[] = [
@@ -39,12 +32,6 @@ export class AppComponent implements OnInit {
       startHour: 13,
       endHour: 19,
     },
-
-    {
-      startHour: 13,
-      endHour: 19,
-      disableHoverAnimation: false
-    },
     {
       startHour: 13,
       endHour: 16,
@@ -54,9 +41,6 @@ export class AppComponent implements OnInit {
       endHour: 16,
     }, {
       startHour: 13,
-      endHour: 19,
-    }, {
-      startHour: 17,
       endHour: 19,
     },
     {
@@ -77,9 +61,7 @@ export class AppComponent implements OnInit {
       }
     },
     hours: {
-      callback: (value: string) => {
-        return value.split(':').map((v, i) => (i === 1) ? v + 'min' : v + 'h').join(':');
-      }
+
     }
   };
 
@@ -93,7 +75,7 @@ export class AppComponent implements OnInit {
   }
 
   randImage() {
-    this.imagesArray = this.data.map((item) => this.images[Math.floor(Math.random() * (this.images.length))]);
+    this.imagesArray = this.data.map((item) => (this.imagesSourceLink + (Math.floor(Math.random() * 10) + 1) + '.png'));
   }
 
   randColors() {
