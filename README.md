@@ -4,9 +4,9 @@ NgxDayFeed is an Angular library for making day based calendars.
 
 The items in the calendar can be filled with any html content including your custom components.
 <div >
-<img src="https://github.com/younesnajjar/ngx-day-feed/blob/master/projects/demo/src/assets/screens/small-screen.PNG?raw=true" height="400"  />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
- <img src="https://github.com/younesnajjar/ngx-day-feed/blob/master/projects/demo/src/assets/screens/wide-screenShot2.PNG?raw=true" height="400" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="https://github.com/younesnajjar/ngx-day-feed/blob/master/projects/demo/src/assets/screens/small-screen-2.PNG?raw=true" height="400"  />
+ <img src="https://github.com/younesnajjar/ngx-day-feed/blob/master/projects/demo/src/assets/screens/small-screen.PNG?raw=true" height="400"  />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ <img src="https://github.com/younesnajjar/ngx-day-feed/blob/master/projects/demo/src/assets/screens/wide-screenShot2.PNG?raw=true" height="400" />
+  <img src="https://github.com/younesnajjar/ngx-day-feed/blob/master/projects/demo/src/assets/screens/numbers-screenshot.PNG?raw=true" height="400"  />
 
 </div>
 
