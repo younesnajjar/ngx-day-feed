@@ -53,7 +53,7 @@ Once the NgxDayFeedModule is imported, you can start using the component in your
 
 ```html
 <ngx-day-feed>
-    <ngx-calendar-item [itemConfig]="{startHour: 8, endHour: 12}"> Hello Wolrd </ngx-calendar-item>
+    <ngx-feed-item [itemConfig]="{startHour: 8, endHour: 12}"> Hello Wolrd </ngx-feed-item>
   </ngx-day-feed>
 ```
 
@@ -107,7 +107,7 @@ config: DayFeedConfig = {
 
 ```html
 <ngx-day-feed [config]="config" >
-  <ngx-calendar-item [itemConfig]="itemConfig"> ANY HTML CONTENT </ngx-calendar-item>
+  <ngx-feed-item [itemConfig]="itemConfig"> ANY HTML CONTENT </ngx-feed-item>
     ...
   </ngx-day-feed>
 ```

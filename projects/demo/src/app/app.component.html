@@ -3,21 +3,15 @@
   <button (click)="randomTimes()">Random Data</button>
 </div>
 <div class="container" style="overflow-y: auto">
-  <ngx-day-feed (itemClick)="showMessage($event)" [config]="config">
+  <ngx-day-feed (itemClick)="showMessage($event)">
 
-    <ngx-calendar-item *ngFor="let item of data; let i = index"
-                       [itemConfig]="{
+    <ngx-feed-item *ngFor="let item of data; let i = index"
+                   [itemConfig]="{
                       startHour: item.startHour,
-                      endHour: item.endHour,
-                      startMinute: item.startMinute,
-                      endMinute: item.endMinute,
-                      backgroundColor: item.backgroundColor,
-                      opacity: item.opacity,
-                      disableHoverAnimation: item.disableHoverAnimation,
-                      disableNewAnimation: item.disableNewAnimation
+                      endHour: item.endHour
                       }">
       <img [src]="item.imageLink" alt="profile image"/>
-    </ngx-calendar-item>
+    </ngx-feed-item>
 
   </ngx-day-feed>
 </div>

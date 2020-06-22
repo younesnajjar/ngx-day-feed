@@ -4,7 +4,7 @@ import {growAnimation} from '../animations/grow.animation';
 import {ItemConfig} from '../models/item-config.model';
 
 @Component({
-  selector: 'ngx-calendar-item',
+  selector: 'ngx-feed-item',
   template: `
     <div [@Grow]="!itemConfig.disableNewAnimation && stateGrow" (click)="itemClick()"
          class="one-availability-container horizontal-animation"
