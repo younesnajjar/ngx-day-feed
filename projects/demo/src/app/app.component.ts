@@ -16,58 +16,60 @@ export class AppComponent implements OnInit {
     '_nc_eui2=AeE_ajamA4T3ZcmKfwIw5lUk4i0MefoJL93iLQx5-gkv3VQob374s3AebFSs-4' +
     'z4skB1Ip250bRGn-DUsA_CPIVw&_nc_ohc=05gvfvnI5xcAX8x04bm&_nc_ht=scontent.fra' +
     'k1-1.fna&oh=03e7d8b726bc5bfbf469b46ceefd0542&oe=5F0BF0CD',
-    'https://avatars3.githubusercontent.com/u/37715926?s=400&u=19561cb03e388feebe6d6380b4c45095ef71fb62&v=4'
+    'https://avatars3.githubusercontent.com/u/37715926?s=400&u=19561cb03e388feebe6d6380b4c45095ef71fb62&v=4',
   ];
+  colors: string[] = ['orange', 'purple', '#FFA0A0', 'grey', null, null];
   imagesArray: string[] = [];
   public data: ItemConfig[] = [
     {
-      startHour: 1,
-      endHour: 3,
-      backgroundColor: 'orange'
+      startHour: 6,
+      endHour: 9,
     },
     {
-      startHour: 3,
-      endHour: 7,
-      backgroundColor: 'orange'
+      startHour: 9,
+      startMinute: 30,
+      endHour: 12,
+    },
+    {
+      startHour: 9,
+      startMinute: 30,
+      endHour: 12,
+    },
+    {
+      startHour: 13,
+      endHour: 19,
     },
 
     {
-      startHour: 3,
-      startMinute: 30,
-      endHour: 6,
+      startHour: 13,
+      endHour: 19,
       disableHoverAnimation: false
     },
     {
-      startHour: 6,
-      endHour: 15,
+      startHour: 13,
+      endHour: 16,
     },
     {
-      startHour: 7,
-      endHour: 17,
-      backgroundColor: 'purple'
+      startHour: 13,
+      endHour: 16,
     }, {
-      startHour: 10,
+      startHour: 13,
       endHour: 19,
     }, {
-      startHour: 11,
-      startMinute: 30,
-      endHour: 20,
+      startHour: 17,
+      endHour: 19,
     },
-
-
     {
-      startHour: 11,
-      endHour: 22,
-      opacity: 1,
-      hoverOpacity: 0.5,
+      startHour: 17,
+      endHour: 19,
     }, {
-      startHour: 11,
-      endHour: 13,
-      backgroundColor: 'orange'
-    }
+      startHour: 17,
+      endHour: 19,
+    },
 
 
   ];
+  private colorsArray: string[];
   config: DayFeedConfig = {
     display: {
       items: {
@@ -83,6 +85,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.randImage();
+    this.randColors();
   }
 
   showMessage($event: any) {
@@ -91,6 +94,10 @@ export class AppComponent implements OnInit {
 
   randImage() {
     this.imagesArray = this.data.map((item) => this.images[Math.floor(Math.random() * (this.images.length))]);
+  }
+
+  randColors() {
+    this.colorsArray = this.data.map((item) => this.colors[Math.floor(Math.random() * (this.colors.length))]);
   }
 
   test() {
