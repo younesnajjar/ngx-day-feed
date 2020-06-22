@@ -1,5 +1,6 @@
-<div class="button-container">
-  <button (click)="test()">Click me</button>
+<div class="buttons-container">
+  <button (click)="addItem()">Add item</button>
+  <button (click)="randomTimes()">Random Data</button>
 </div>
 <div class="container" style="overflow-y: auto">
   <ngx-day-feed (itemClick)="showMessage($event)" [config]="config">
@@ -10,12 +11,12 @@
                       endHour: item.endHour,
                       startMinute: item.startMinute,
                       endMinute: item.endMinute,
-                      backgroundColor: colorsArray[i],
+                      backgroundColor: item.backgroundColor,
                       opacity: item.opacity,
                       disableHoverAnimation: item.disableHoverAnimation,
                       disableNewAnimation: item.disableNewAnimation
                       }">
-      <img [src]="imagesArray[i]" alt="profile image"/>
+      <img [src]="item.imageLink" alt="profile image"/>
     </ngx-calendar-item>
 
   </ngx-day-feed>

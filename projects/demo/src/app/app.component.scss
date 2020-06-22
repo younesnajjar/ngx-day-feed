@@ -7,13 +7,31 @@
   margin: auto;
 }
 
-.button-container {
+.buttons-container {
   text-align: center;
+
+  button {
+    padding: 10px 20px;
+    margin: 4px 10px;
+    background-color: #37aeeb;
+    border: 0;
+    border-radius: 4px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+  }
 }
+
 img {
   height: 40px;
   width: 40px;
   border-radius: 50%;
   border: 3px white solid;
   background-color: black;
+}
+
+span {
+  color: white;
+  font-size: 30px;
+  font-family: 'Montserrat', serif;
 }
