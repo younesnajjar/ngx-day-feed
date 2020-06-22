@@ -1,30 +1,66 @@
-# ngx-day-feed
+# NgxDayFeed
 
-Angular component for day (24 h) feed
+NgxDayFeed is an Angular library for making day based calendars.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.15.
+The items in the calendar can be filled with any html content including your custom components.
+<div style="text-align: center;display: flex; flex-direction: 'row'; justify-content: center">
+<img src="https://github.com/younesnajjar/ngx-day-feed/blob/master/projects/demo/src/assets/screens/small-screen.PNG?raw=true" height="400" />
+ <img src="https://github.com/younesnajjar/ngx-day-feed/blob/master/projects/demo/src/assets/screens/wide-screenShot2.PNG?raw=true" height="400" />
+ <img src="https://github.com/younesnajjar/ngx-day-feed/blob/master/projects/demo/src/assets/screens/small-screen-2.PNG?raw=true" height="400" />
 
-## Development server
+</div>
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Installation
 
-## Code scaffolding
+Install avatar component using NPM::
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+```bash
+npm i ngx-day-feed --save
+```
 
-## Build
+## Usage
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+1. Import NgxDayFeedModule :
 
-## Running unit tests
+Once you have installed ngx-day-feed, you can import it in your `AppModule`:
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```typescript
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
 
-## Running end-to-end tests
+import { AppComponent } from './app.component';
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+// Import your AvatarModule
+import { AvatarModule } from 'ngx-avatar';
 
-## Further help
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    // Specify NgxDayFeedModule as an import
+    NgxDayFeedModule
+  ],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
-=======
+2. Start using it:
+
+Once the NgxDayFeedModule is imported, you can start using the component in your Angular application:
+
+```html
+<ngx-day-feed>
+    <ngx-calendar-item [itemConfig]="{startHour: 8, endHour: 12}"></ngx-calendar-item>
+  </ngx-day-feed>
+```
+
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
