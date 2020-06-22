@@ -12,7 +12,7 @@ The items in the calendar can be filled with any html content including your cus
 
 ## Installation
 
-Install avatar component using NPM::
+Install NgxDayFeed using NPM::
 
 ```bash
 npm i ngx-day-feed --save
