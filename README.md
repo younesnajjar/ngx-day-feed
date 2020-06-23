@@ -38,7 +38,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 
 // Import your AvatarModule
-import { NgxDayFeedModule } from 'ngx-avatar';
+import { NgxDayFeedModule } from 'ngx-day-feed';
 
 @NgModule({
   declarations: [
