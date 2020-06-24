@@ -3,7 +3,7 @@
   <button (click)="randomTimes()">Random Data</button>
 </div>
 <div class="container" style="overflow-y: auto">
-  <ngx-day-feed (itemClick)="showMessage($event)" [config]="config">
+  <ngx-day-feed (itemClick)="showMessage($event)" [config]="undefined">
 
     <ngx-feed-item *ngFor="let item of data; let i = index"
                    [itemConfig]="{

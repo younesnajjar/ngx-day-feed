@@ -11,6 +11,29 @@ export class AppComponent implements OnInit {
   title = 'demo';
   imagesSourceLink = 'https://raw.githubusercontent.com/younesnajjar/ngx-day-feed/master/projects/demo/src/assets/profiles/avatar-';
   colors: string[] = ['orange', 'purple', '#FFA0A0', 'grey', null, null];
+  times: any[] = [
+    {
+    startHour: 6,
+    endHour: 9,
+  },
+    {
+      startHour: 9,
+      startMinute: 30,
+      endHour: 12,
+    },
+    {
+      startHour: 13,
+      endHour: 19,
+    },
+    {
+      startHour: 13,
+      endHour: 16,
+    },
+    {
+      startHour: 17,
+      endHour: 19,
+    },
+  ];
   config: DayFeedConfig = {
     display: {
       items: {
@@ -25,9 +48,8 @@ export class AppComponent implements OnInit {
       endHour: 9,
     },
     {
-      startHour: 9,
-      startMinute: 30,
-      endHour: 12,
+      startHour: 6,
+      endHour: 9,
     },
     {
       startHour: 9,
@@ -85,9 +107,10 @@ export class AppComponent implements OnInit {
 
   randomTimes() {
     this.data.forEach((item) => {
-      item.startHour = Math.floor(Math.random() * (11)) + 1;
+      const time = this.times[Math.floor(Math.random() * (this.times.length))];
+      item.startHour = time.startHour;
       item.startMinute = 30;
-      item.endHour = Math.floor(Math.random() * (10)) + item.startHour + 2;
+      item.endHour = time.endHour;
       // console.log(item.startHour + ':' + item.startMinute + ' -> ' + item.endHour + ':' + item.endMinute);
     });
     this.ngxDayFeedComponent.update();

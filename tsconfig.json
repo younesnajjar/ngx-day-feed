@@ -20,10 +20,10 @@
     ],
     "paths": {
       "ngx-day-feed": [
-        "projects/ngx-day-feed/src/lib"
+        "dist/ngx-day-feed"
       ],
       "ngx-day-feed/*": [
-        "projects/ngx-day-feed/src/lib/*"
+        "dist/ngx-day-feed"
       ]
     }
   },

@@ -2,9 +2,9 @@
  * Public API Surface of ngx-day-feed
  */
 
-export * from 'ngx-day-feed/ngx-day-feed.component';
-export * from 'ngx-day-feed/ngx-day-feed.module';
-export * from 'ngx-day-feed/feed-item/feed-item.component';
+export * from './lib/ngx-day-feed.component';
+export * from './lib/ngx-day-feed.module';
+export * from './lib/feed-item/feed-item.component';
 export * from './lib/models';
 export * from './lib/services/emitter.service';
 export * from './lib/utils/consts';
