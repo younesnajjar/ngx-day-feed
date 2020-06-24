@@ -12,7 +12,7 @@ The items in the calendar can be filled with any html content including your cus
 
 ## Demo
 
-Check out this [link](https://stackblitz.com/edit/ngx-day-feed) to play with ngxDayFeed  :rocket:
+Check out this [link](https://codesandbox.io/s/ngx-day-feed-niyhv) to play with ngxDayFeed  :rocket:
 
 
 
